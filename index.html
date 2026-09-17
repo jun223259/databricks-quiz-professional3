@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Databricks Certified Data Engineer Professional — Practice Exam 3</title>
+<style>
+  :root{
+    --ink:#131b23;
+    --ink-soft:#4b5a68;
+    --paper:#f2f4f6;
+    --card:#ffffff;
+    --line:#d7dee5;
+    --ok:#0f6b4f;
+    --ok-bg:#e6f3ed;
+    --no:#9a3b32;
+    --no-bg:#f6ebea;
+    --mark:#1e4f7a;
+    --shadow:0 1px 0 rgba(19,27,35,.06);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    font-size:15.5px;
+    line-height:1.75;
+  }
+  header{
+    background:var(--ink);
+    color:#eef2f5;
+    padding:34px 22px 26px;
+  }
+  .wrap{max-width:860px;margin:0 auto}
+  h1{
+    margin:0 0 6px;
+    font-size:1.45rem;
+    font-weight:700;
+    letter-spacing:.01em;
+    line-height:1.4;
+  }
+  .sub{margin:0;color:#9fb1c0;font-size:.85rem}
+  .stats{margin-top:18px;display:flex;gap:26px;flex-wrap:wrap;font-size:.82rem;color:#9fb1c0}
+  .stats b{color:#fff;font-size:1.5rem;font-weight:700;display:block;line-height:1.2}
+  .controls{
+    position:sticky;top:0;z-index:10;
+    background:rgba(242,244,246,.94);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+    padding:12px 22px;
+  }
+  .ctl-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  input[type=search]{
+    flex:1;min-width:180px;
+    padding:8px 12px;border:1px solid var(--line);border-radius:6px;
+    background:#fff;font:inherit;font-size:.86rem;color:var(--ink);
+  }
+  input[type=search]:focus,button:focus-visible,.chip:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
+  button{
+    font:inherit;font-size:.82rem;cursor:pointer;
+    padding:8px 14px;border-radius:6px;border:1px solid var(--line);
+    background:#fff;color:var(--ink);
+  }
+  button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  main{padding:26px 22px 90px}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:22px 24px;margin-bottom:18px;box-shadow:var(--shadow);
+  }
+  .qhead{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;margin-bottom:12px}
+  .qnum{font-size:1.05rem;font-weight:700;color:var(--mark)}
+  .domain{
+    font-size:.72rem;color:var(--ink-soft);
+    border:1px solid var(--line);border-radius:4px;padding:2px 8px;
+  }
+  .qtext{margin:0 0 16px;font-size:.97rem}
+  .code-block{
+    white-space:pre-wrap;word-break:break-word;
+    font-family:'SFMono-Regular',Consolas,Menlo,monospace;
+    font-size:.82rem;line-height:1.5;
+    background:#f5f5f7;border:1px solid var(--line);border-radius:6px;
+    padding:10px 12px;margin:8px 0;overflow-x:auto;display:block;
+  }
+  ol.opts{list-style:none;margin:0;padding:0;counter-reset:o}
+  ol.opts li{
+    counter-increment:o;
+    border:1px solid var(--line);border-radius:8px;
+    padding:12px 14px;margin-bottom:9px;background:#fcfdfd;
+  }
+  li.correct{border-color:var(--ok);background:var(--ok-bg)}
+  .opt-t{display:flex;gap:10px;font-size:.9rem}
+  .opt-t::before{
+    content:counter(o,upper-alpha);
+    font-weight:700;color:var(--ink-soft);flex:none;
+  }
+  li.correct .opt-t::before{color:var(--ok)}
+  .verdict{
+    display:inline-block;margin-top:9px;font-size:.72rem;font-weight:700;
+    padding:2px 8px;border-radius:4px;
+  }
+  .v-ok{background:var(--ok);color:#fff}
+  .v-no{background:var(--no-bg);color:var(--no)}
+  .exp{margin:7px 0 0;font-size:.85rem;color:var(--ink-soft)}
+  .exp-ja{
+    margin-top:5px;padding-left:10px;
+    border-left:2px solid #c9d4de;color:#3d4f5f;
+  }
+  .ov-ja{
+    margin:8px 0 0;padding-top:8px;
+    border-top:1px dashed #c2d0dd;color:#33475a;
+  }
+  body.hide-answers .exp-ja{display:none}
+  .card.shown .exp-ja{display:block!important}
+  .overall{
+    margin-top:16px;padding:14px 16px;border-left:3px solid var(--mark);
+    background:#f4f7fa;border-radius:0 8px 8px 0;font-size:.88rem;
+  }
+  .overall h4{margin:0 0 6px;font-size:.76rem;color:var(--mark);font-weight:700}
+  .jp{
+    margin-top:12px;padding:12px 16px;border-radius:8px;
+    background:#fff8ec;border:1px solid #f0e0c2;font-size:.88rem;
+  }
+  .jp h4{margin:0 0 4px;font-size:.76rem;color:#8a6a2c;font-weight:700}
+  body.hide-answers li.correct{border-color:var(--line);background:#fcfdfd}
+  body.hide-answers .verdict,
+  body.hide-answers .exp,
+  body.hide-answers .overall,
+  body.hide-answers .jp{display:none}
+  .reveal{margin-top:12px;display:none;font-size:.78rem;padding:6px 12px}
+  .card.shown .reveal{background:var(--ink);color:#fff;border-color:var(--ink)}
+  body.hide-answers .reveal{display:inline-block}
+  .card.shown li.correct{border-color:var(--ok)!important;background:var(--ok-bg)!important}
+  .card.shown .verdict,.card.shown .exp,.card.shown .overall,.card.shown .jp{display:block!important}
+  .card.shown .verdict{display:inline-block!important}
+  .empty{text-align:center;color:var(--ink-soft);padding:40px}
+  @media print{
+    .controls{display:none}
+    body{background:#fff}
+    .card{break-inside:avoid;box-shadow:none}
+  }
+</style>
+</head>
+<body class="hide-answers">
+<header>
+  <div class="wrap">
+    <h1>Databricks Certified Data Engineer Professional<br>Practice Exam 3</h1>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="wrap">
+    <div class="ctl-row">
+      <input type="search" id="search" placeholder="キーワード検索（例: Auto Loader, CDF, ウォーターマーク）">
+      <button id="toggle-ans" class="on">すべての解答を表示</button>
+      <button id="expand-all" style="display:none">全部表示</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="wrap" id="list"></div>
+  <div class="wrap empty" id="empty" style="display:none">該当する問題がありません。</div>
+</main>
+
+<script>
+const DATA = [
+{
+n:1, d:"Delta Lake",
+q:"users テーブルの age 列に負の値が入っているのを見つけたため、ジュニアエンジニアが ALTER TABLE users ADD CONSTRAINT valid_age CHECK (age > 0); を実行しましたが失敗しました。原因を説明しているのはどれですか。",
+o:[
+ {t:"CHECK 制約を追加する構文が誤っている。正しくは ALTER TABLE users ADD CONSTRAINT ON COLUMN age (CHECK > 0) である", c:false, e:"そのような構文は存在しない。実際の構文自体は設問のとおりで問題ない。"},
+ {t:"users テーブルには既にこの新しい制約に違反する行が含まれている。テーブルに追加する前に、既存のすべての行が制約を満たしている必要がある", c:true, e:"正解。ADD CONSTRAINT はテーブルに追加する前に既存の全行が制約を満たすか検証する。満たさない行があるとコマンドは失敗する。"},
+ {t:"users テーブルには既に行が存在する。CHECK 制約は空のテーブルにしか追加できない", c:false, e:"空のテーブルである必要はない。既存行が制約を満たしていれば追加できる。"},
+ {t:"users テーブルは既に存在している。CHECK 制約は CREATE TABLE 実行時にしか追加できない", c:false, e:"既存テーブルに対しても ALTER TABLE で追加できる。"}
+],
+ov:"ADD CONSTRAINT コマンドは、制約をテーブルへ追加する前に、テーブル内の既存のすべての行がその制約を満たすかを検証する。満たさない場合、テーブル内の一部の行が新しい CHECK 制約に違反しているというエラーでコマンドが失敗する。",
+jp:"CHECK 制約の追加は『既存データの事後検証』を伴う。既存の負のage値をクリーンアップしてから制約を追加する必要がある、という運用上の順序を理解する。"
+},
+{
+n:2, d:"パフォーマンス最適化",
+q:"高トラフィックなサイトのクリックストリームイベント(user_id, timestamp, event_type, page_url)を、ユーザープロファイルデータセットと user_id で結合しています。少数のユーザーが大量のイベントを生成しているためデータスキューが発生し性能が大きく低下しています。このスキューを軽減する適切な方法でないものはどれですか。",
+o:[
+ {t:"結合時のシャッフルを避けるため、偏ったキーを全ワーカーノードへブロードキャストする", c:true, e:"正解(＝不適切)。ブロードキャストは通常、小さなルックアップデータセットをシャッフルなしで共有するために使う。偏ったキーをブロードキャストしても、関連データが大きければスキュー問題は解決せず、各エグゼキュータのメモリ圧をむしろ増やしうる。"},
+ {t:"偏った user_id 値にランダムなプレフィックスを付けるソルティング(salting)で、パーティション間に負荷を分散する", c:false, e:"適切な方法。ホットキーを人為的に複数パーティションへ分散させ、シャッフル時のボトルネックを減らす。"},
+ {t:"結合前にクリックストリームデータセットを user_id で再パーティションし、パーティション数を増やす", c:false, e:"適切な方法。パーティション数を増やすとデータ負荷が均等になり並列性が高まる。"},
+ {t:"高頻度ユーザーを専用ジョブで扱うことで、偏ったキーの処理を分離する", c:false, e:"適切な方法。偏ったキーを結合処理全体から切り離し、専用のリソースで扱うことで性能を改善できる。"}
+],
+ov:"ブロードキャストは通常、シャッフルを伴う結合を避けるために小さなルックアップデータセットを全エグゼキュータへ共有するために使う。しかし偏ったキー(特にそれに紐づくデータが大きい場合)をブロードキャストしてもスキュー問題は解決せず、各エグゼキュータのメモリ圧をむしろ増大させうる。一方、ソルティング・再パーティション・偏ったキーの専用処理はいずれもスキュー軽減に有効な手法である。",
+jp:"スキュー対策の定番：salting(ホットキーの分散)、repartition(パーティション増加)、偏ったキーの専用処理。broadcast は『大きなデータの偏ったキー』には効かない、という点が引っかけ。broadcastが有効なのは小さいテーブル全体をコピーする場合(Exam2 Q26)。"
+},
+{
+n:3, d:"パフォーマンス最適化",
+q:"OPTIMIZE コマンドを手動実行して Delta テーブルの小さいファイルを圧縮するとき、既定のターゲットファイルサイズはどれですか。",
+o:[
+ {t:"256 MB", c:false, e:"既定値ではない。"},
+ {t:"1024 MB", c:true, e:"正解。既定値は1073741824バイト、つまり1GBに設定される。"},
+ {t:"128 MB", c:false, e:"これは Auto Compaction の既定ターゲットサイズ(標準の OPTIMIZE ではない)。"},
+ {t:"512 MB", c:false, e:"既定値ではない。"}
+],
+ov:"OPTIMIZE コマンドは小さいデータファイルをより大きなファイルへ圧縮する。既定値は1073741824であり、これは1GBのサイズを設定する。",
+jp:"標準 OPTIMIZE＝1GB、Auto Compaction＝128MB(Exam1 Q46)。数字の対比をセットで覚える。"
+},
+{
+n:4, d:"パフォーマンス最適化",
+q:"パーティション化された Delta Lake テーブルで、ほとんどの一般的なクエリで大きな性能低下が起きています。OPTIMIZE コマンドを実行しても改善しませんでした。この遅延の原因として妥当なのはどれですか。",
+o:[
+ {t:"OPTIMIZE コマンドをテーブル全体に適用している。各パーティションに個別に適用する必要がある", c:false, e:"OPTIMIZE をパーティションごとに実行する必要はなく、それが根本原因でもない。"},
+ {t:"テーブルが過剰に、あるいは誤ってパーティション化されている。これを解決するには全データファイルの完全な書き換えが必要", c:true, e:"正解。過剰・誤ったパーティション化では、ファイルはパーティション境界をまたいで結合・圧縮できないため、OPTIMIZE だけでは解決しない。全データファイルの完全な書き換えが必要になる。"},
+ {t:"OPTIMIZE コマンドを ZORDER なしで適用している。パーティション列に Z-order が必要", c:false, e:"パーティション列自体に Z-order を適用しても、パーティション設計自体の問題は解決しない。"},
+ {t:"テーブルに削除すべき古いデータファイルが多すぎる。代わりに VACUUM コマンドを実行する必要がある", c:false, e:"VACUUM は不要になった古いファイルの物理削除であり、パーティション設計の問題には対処しない。"}
+],
+ov:"過剰に、あるいは誤ってパーティション化されたデータは大きな悪影響を受ける。ファイルはパーティション境界をまたいで結合・圧縮できないため、パーティション化された小さなテーブルはストレージコストとスキャンすべきファイル総数を増やす。これがほとんどの一般的なクエリの遅延につながる。こうした問題を解決するには全データファイルの完全な書き換えが必要になる。",
+jp:"Exam2 Q16(過剰パーティションの兆候)の続き。OPTIMIZEだけでは解決しない理由(パーティション境界をまたげない)を理解し、根本解決には再設計・完全書き換えが必要と知る。"
+},
+{
+n:5, d:"Delta Lake",
+q:"date, employee_id, rating の3列を持つ employees_performance テーブルへ、前日の従業員の生産性イベントを毎晩処理するバッチジョブを作ります。時系列で従業員の成績を比較できるようにデータを保存したい場合、正しいコードはどれですか。",
+o:[
+ {t:"performance_df.write.format(\"delta\").saveAsTable(\"employees_performance\")", c:false, e:"書き込みモードが既定(error/errorifexists)のままで、テーブルが既に存在するとエラーになる。"},
+ {t:"performance_df.write.mode(\"append\").saveAsTable(\"employees_performance\")", c:true, e:"正解。date 列を持つこのテーブルでは、新しい日付のバッチごとに append モードで追記していくことで、時系列比較ができるようになる。"},
+ {t:"performance_df.write.partitionBy(\"date\").saveAsTable(\"employees_performance\")", c:false, e:"パーティション化だけを指定しても書き込みモードが既定のままで、2回目以降の実行でエラーになる。"},
+ {t:"performance_df.write.mode(\"overwrite\").saveAsTable(\"employees_performance\")", c:false, e:"overwrite では過去の日付のデータが失われ、時系列比較ができなくなる。"}
+],
+ov:"DataFrameWriter.mode は、データやテーブルが既に存在する場合の書き込み挙動を定義する。選択肢には append(既存データへ追記)、overwrite(既存データを上書き)、error/errorifexists(データが既に存在すればエラー、これが既定の保存モード)、ignore(データが既に存在すれば黙って何もしない)がある。employees_performance テーブルには date 列があるため、時系列で従業員の成績を比較できるようにするには、新しい日付を持つ各バッチのデータを append モードでテーブルへ追記すべきである。",
+jp:"時系列比較(履歴を残したい)＝append。毎回上書き(最新状態だけでよい)＝overwrite。要件文の『compare across time(時系列比較)』という語がappendを選ぶ決め手。"
+},
+{
+n:6, d:"ジョブ・ワークフロー",
+q:"既存クラスターへノートブックをアタッチするために必要な最小限の権限はどれですか。",
+o:[
+ {t:"クラスターに対する「Can Manage」権限", c:false, e:"アタッチのみが目的ならこれは過剰な権限。"},
+ {t:"クラスター作成権限＋クラスターに対する「Can Attach To」権限", c:false, e:"クラスター作成権限は既存クラスターへのアタッチには不要。"},
+ {t:"クラスターに対する「Can Restart」権限", c:false, e:"アタッチだけなら Can Restart も過剰(起動・再起動・終了までできてしまう)。"},
+ {t:"クラスターに対する「Can Attach To」権限", c:true, e:"正解。ノートブックをクラスターへアタッチするための最小権限。"}
+],
+ov:"クラスター権限には2種類ある。①「Allow cluster creation」entitlement はクラスターを作成できるかを制御する。②クラスターレベルの権限は特定クラスターの利用・変更を制御し、No Permissions / Can Attach To / Can Restart / Can Manage の4段階がある。ノートブックのアタッチのみが目的であれば Can Attach To が最小権限。",
+jp:"4段階の権限がそれぞれ単独の設問として出る(Exam1 Q22＝Can Manage、Exam2 Q4＝Can Restart、Exam3 Q6・Q9)。目的(設定編集/起動/アタッチのみ)に応じた最小権限を素早く判定できるようにする。"
+},
+{
+n:7, d:"ジョブ・ワークフロー",
+q:"既存の Databricks ジョブを Declarative Automation Bundles(旧 Databricks Asset Bundles)で管理したい。CLI を使ってジョブの YAML 定義を取得し、参照されるアーティファクトをダウンロードするコマンドはどれですか。",
+o:[
+ {t:"databricks bundle download job --existing-job-id", c:false, e:"そのようなコマンドは存在しない。"},
+ {t:"databricks bundle clone job --existing-job-id", c:false, e:"そのようなコマンドは存在しない。"},
+ {t:"databricks bundle generate job --existing-job-id", c:true, e:"正解。ワークスペースに既に存在するリソースに対してバンドル構成を生成できる。ジョブ・パイプライン・アプリ・ダッシュボードの YAML 定義を生成し、参照するノートブックなどのアーティファクトも自動的にダウンロードする。"},
+ {t:"databricks bundle get job --existing-job-id", c:false, e:"そのようなコマンドは存在しない。"}
+],
+ov:"正しいコマンドは databricks bundle generate である。これはワークスペースに既に存在するリソースに対してバンドル構成を生成できる。このプロセスはジョブ・パイプライン・アプリ・ダッシュボードの YAML 定義を生成し、参照するノートブックなどのアーティファクトを自動的にダウンロードする。",
+jp:"既存リソースからバンドル定義を逆生成するコマンド：databricks bundle generate。DABs の新規作成(init)・デプロイ(deploy)・実行(run)・生成(generate)の各サブコマンドの用途を区別する。"
+},
+{
+n:8, d:"Unity Catalog・ガバナンス",
+q:"医療機関の patient_records テーブル(patient_id, name, department, diagnosis)で、医師だけが diagnosis 列の値を見られるようにマスクする UDF を作りたい場合、正しい関数はどれですか。",
+o:[
+ {t:"RETURN CASE WHEN is_account_group_member('diagnosis') THEN doctors ELSE 'CONFIDENTIAL' END;", c:false, e:"グループ名が 'diagnosis' になっており誤り。また引数名も doctors になっているなど、ロジックが列の意味と噛み合っていない。"},
+ {t:"RETURN CASE WHEN is_account_group_member('doctors') THEN 'CONFIDENTIAL' ELSE diagnosis END;", c:false, e:"条件が逆。医師には 'CONFIDENTIAL' を返し、それ以外に実際の値を返してしまっている。"},
+ {t:"RETURN CASE WHEN diagnosis IS NOT NULL THEN diagnosis ELSE 'CONFIDENTIAL' END;", c:false, e:"グループメンバーシップに基づかず、NULL かどうかで分岐しており要件を満たさない。"},
+ {t:"RETURN CASE WHEN is_account_group_member('doctors') THEN diagnosis ELSE 'CONFIDENTIAL' END;", c:true, e:"正解。is_account_group_member('doctors') で現在のユーザーが doctors グループに属するかを確認し、属していれば実際の診断内容を、そうでなければ 'CONFIDENTIAL' を返す。"}
+],
+ov:"正しい関数は、is_account_group_member('doctors') 関数を使って現在のユーザーが「doctors」グループに属するかを確認することで、ロールベースのアクセス制御を適切に実装する。ユーザーが医師であれば実際の診断値を明らかにし、そうでなければ機微な患者情報を守るため diagnosis を 'CONFIDENTIAL' という文字列で置き換える。この方法は、認可された医療スタッフが必要な情報にアクセスできるようにしつつ、医療データのプライバシー要件への準拠を確保する。",
+jp:"列マスク関数の型：CASE WHEN is_account_group_member('特権グループ') THEN 実値 ELSE マスク値 END。Exam1 Q32(行フィルタ)と対称の構造だが、行フィルタは真偽値、列マスクは値そのものを返す点が違う。"
+},
+{
+n:9, d:"ジョブ・ワークフロー",
+q:"既存のクラスターを起動・終了するために必要な最小限の権限はどれですか。",
+o:[
+ {t:"クラスター作成権限＋クラスターに対する「Can Restart」権限", c:false, e:"クラスター作成権限は既存クラスターの起動・終了には不要。"},
+ {t:"クラスターに対する「Can Manage」権限", c:false, e:"起動・終了のみが目的ならこれは過剰な権限。"},
+ {t:"クラスターに対する「Can Attach To」権限", c:false, e:"Can Attach To ではクラスターの起動・終了はできない。"},
+ {t:"クラスターに対する「Can Restart」権限", c:true, e:"正解。クラスターの起動・再起動・終了を行うための最小権限。"}
+],
+ov:"クラスター権限には2種類ある。①「Allow cluster creation」entitlement はクラスターを作成できるかを制御する。②クラスターレベルの権限は特定クラスターの利用・変更を制御し、No Permissions / Can Attach To / Can Restart / Can Manage の4段階がある。起動・終了には Can Restart が必要十分。",
+jp:"Q6と対になる問題。『アタッチのみ』＝Can Attach To、『起動・終了もしたい』＝Can Restart。この2つの境界線がこの試験で繰り返し問われる最重要ポイント。"
+},
+{
+n:10, d:"Lakeflow SDP",
+q:"追記専用のストリーミングテーブル inventory_raw(product_id, quantity, event_timestamp)から、product_id ごとの最新の在庫状態(current_quantity, updated_timestamp)をニアリアルタイムで捉える inventory_latest テーブルを作りたい場合、最も適したオブジェクトはどれですか。",
+o:[
+ {t:"Live table", c:false, e:"現在のマテリアライズドビューにあたり、バッチ指向またはスケジュールされた増分処理向け。個々のレコードを継続的にリアルタイム更新する用途には向かない。"},
+ {t:"Temporary view", c:false, e:"揮発性であり永続的な状態追跡には適さない。"},
+ {t:"Materialized view", c:false, e:"事前計算されたクエリのバッチ指向・スケジュール処理向けで、個々のレコードを継続的にリアルタイム更新する用途ではない。"},
+ {t:"Streaming table", c:true, e:"正解。inventory_raw のような追記専用ソースからのニアリアルタイムな変更を継続的に捉え更新するために設計されている。CDC フィードを適用することで、テーブル全体を再構築せずに product_id ごとの最新状態を反映できる。"}
+],
+ov:"inventory_latest テーブルの実装に最も適したオブジェクトは Streaming table である。inventory_raw のような追記専用ソースからのニアリアルタイムな変更を継続的に捉え更新するために設計されているため。inventory_latest を Streaming table として実装すれば、inventory_raw からの変更のマージや CDC フィードの適用により、テーブルが常に product_id ごとの最新の在庫状態を反映できる。新しい各イベント(更新でも挿入でも)はリアルタイムで適用され、テーブル全体を再構築することなく current_quantity と updated_timestamp を更新できる。これが materialized view や temporary view に対する主な利点である。",
+jp:"SDPのデータセット種別の使い分け(3回目の出題)。『最新状態への継続的な更新(CDC的な用途)』＝streaming table、というパターンをここで確定させる。"
+},
+{
+n:11, d:"ジョブ・ワークフロー",
+q:"指定した時刻以降に開始したジョブのすべての実行を一覧表示する Databricks CLI コマンドはどれですか。",
+o:[
+ {t:"databricks jobs list-runs --job-id <job-id> --from <time-value>", c:false, e:"パラメータ名が誤り。"},
+ {t:"databricks jobs list-runs --job-id <job-id> --time-from <time-value>", c:false, e:"パラメータ名が誤り。"},
+ {t:"databricks jobs list-runs --job-id <job-id> --start <time-value>", c:false, e:"パラメータ名が誤り。"},
+ {t:"databricks jobs list-runs --job-id <job-id> --start-time-from <time-value>", c:true, e:"正解。--start-time-from が、開始時刻に基づいてジョブ実行をフィルタするために Databricks CLI で使う正しいパラメータ。"}
+],
+ov:"指定した時刻以降に開始したジョブのすべての実行を一覧表示する正しい Databricks CLI コマンドは databricks jobs list-runs --job-id <job-id> --start-time-from <time-value> である。--start-time-from が、開始時刻に基づいてジョブ実行をフィルタするために Databricks CLI で使う正しいパラメータ。",
+jp:"CLI のオプション名の暗記問題。--start-time-from という正確な名称を押さえる。"
+},
+{
+n:12, d:"Lakeflow SDP",
+q:"SDP パイプラインで、products_id・date・quantity に関する複数のデータ品質ルールを valid_products という辞書にまとめています。違反したレコードもターゲットへ書き込みつつ、違反に関するメトリクスをパイプラインが記録するようにしたい場合、正しい構成はどれですか。",
+o:[
+ {t:"@dlt.expect_or_drop(valid_products)", c:false, e:"個々の無効なレコードを削除してしまう。要件は『書き込みつつ記録する』こと。"},
+ {t:"@dlt.expect_or_fail(valid_products)", c:false, e:"個々のルール違反でパイプラインを停止させてしまう。"},
+ {t:"@dlt.expect(valid_products)", c:false, e:"expect は個々に期待値を適用するが、辞書内の複数ルールをグループとしてまとめて強制するものではない。"},
+ {t:"@dlt.expect_all(valid_products)", c:true, e:"正解。指定したすべてのデータ品質ルールを強制し、有効・無効の両方のレコードをターゲットテーブルへ書き込みつつ、ルール違反に関するメトリクスを記録する。"}
+],
+ov:"dlt.expect_all は指定したすべてのデータ品質ルールを強制し、有効・無効の両方のレコードをターゲットテーブルへ書き込みつつ、ルール違反に関するメトリクスを記録する。dlt.expect は期待値を個別に適用するだけでグループとしてまとめて強制するわけではないため要件を完全には満たさない。同様に dlt.expect_or_drop は個々の無効なレコードを削除し、dlt.expect_or_fail は個々のルール違反でパイプラインを停止させる。複数の期待値をグループ化し集合的なアクションを指定するには dlt.expect_all_or_drop や dlt.expect_all_or_fail の関数を使うことができる。",
+jp:"単一ルール用(expect/expect_or_drop/expect_or_fail)と複数ルールをまとめる版(expect_all/expect_all_or_drop/expect_all_or_fail)がある、という構造を理解する。Exam1 Q38 の expect_all はまさにこのパターン。"
+},
+{
+n:13, d:"Lakeflow SDP",
+q:"「事前計算したクエリ結果を物理的に保存し、複雑な集計や BI ワークロードの性能を高めるために自動またはスケジュールで更新されるオブジェクト」という記述が指しているのはどれですか。",
+o:[
+ {t:"Standard view", c:false, e:"データを物理的に保存せず、単なる保存済みクエリにすぎない。"},
+ {t:"Temporary view", c:false, e:"セッション中のみ存在し永続的ではない。"},
+ {t:"Materialized view", c:true, e:"正解。クエリ結果を物理的に保存し、自動またはスケジュールで更新され、複雑な集計や BI ワークロードに最適化されている。"},
+ {t:"Streaming table", c:false, e:"データを増分的に取り込むためのものであり、事前計算されたクエリ結果の保存が目的ではない。"}
+],
+ov:"この記述は materialized view を指している。Databricks SQL では、materialized view はクエリ結果を物理的に保存する Unity Catalog のマネージドテーブルである。オンデマンドで計算する standard view と異なり、materialized view は結果をキャッシュし、下地となるソーステーブルの変化に応じてスケジュールまたは自動で更新する。高コストあるいは頻繁に使われるクエリを事前計算することで、クエリのレイテンシとリソース消費を下げ、複雑な集計の性能を最適化し BI ダッシュボードの性能を高める。まとめると materialized view は、①クエリ結果を物理的に保存する、②自動またはスケジュールで更新できる、③複雑な集計や BI ワークロードに最適化されている、という特徴を持つ。",
+jp:"materialized view の定義文をそのまま覚える。Exam2 Q33と同じ知識で、今回は逆(定義から名称を当てる)方向の出題。"
+},
+{
+n:14, d:"Structured Streaming",
+q:"Stream-Static Join における静的な Delta テーブルに関する記述として正しいのはどれですか。",
+o:[
+ {t:"静的な Delta テーブルの最新バージョンは stream-static join の最初のマイクロバッチでのみ返され、それ以降はキャッシュされて使われる", c:false, e:"誤り。マイクロバッチごとに最新バージョンが返される。"},
+ {t:"静的な Delta テーブルは stream-static join の各マイクロバッチごとに REFRESH TABLE コマンドで更新する必要がある", c:false, e:"REFRESH TABLE を明示的に実行する必要はない。"},
+ {t:"静的な Delta テーブルはクラスター内の全ワーカーノードへブロードキャストできるほど小さくなければならない", c:false, e:"ブロードキャストが必須というわけではない。"},
+ {t:"静的な Delta テーブルは、stream-static join のマイクロバッチによってクエリされるたびに最新バージョンが返される", c:true, e:"正解。stream-static join は、データストリームとの結合操作でクエリされるたびに静的な Delta テーブルの最新バージョンが返されるという Delta Lake の保証を活用する。"}
+],
+ov:"stream-static join は、データストリームとの結合操作でクエリされるたびに静的な Delta テーブルの最新バージョンが返されるという Delta Lake の保証を活用する。",
+jp:"Exam2 Q58(ストリーミング側が処理を駆動する)と対になる知識。静的側は『クエリされるたびに最新版が返る』が、更新自体をトリガーするのはストリーミング側、という2つの性質をセットで理解する。"
+},
+{
+n:15, d:"Lakeflow SDP",
+q:"SDP パイプラインの実行前に、ノートブック内の「Validate」ボタンを必ずクリックすることをチームのリードが徹底させています。この慣行の主な利点はどれですか。",
+o:[
+ {t:"実際にデータを処理することなく、パイプラインコードの構文エラーをチェックする", c:true, e:"正解。ノートブック内の「validate」オプションは、実行前にパイプライン定義の構文エラーや設定エラーを特定し、実行時の失敗や部分的なデータ書き込みのリスクを減らす。"},
+ {t:"すべてのパイプラインコンポーネントに対して単体テストを実行し正しさを検証する", c:false, e:"単体テストの実行機能ではない。"},
+ {t:"ユーザーがカタログにテーブルを作成する権限を持っているかを検証する", c:false, e:"権限の検証機能ではない。"},
+ {t:"小さなデータセットでパイプラインを実行し変換結果をプレビューする", c:false, e:"実際にデータを処理するわけではない。"}
+],
+ov:"ノートブック内の「validate」オプションは、実行前にパイプライン定義の構文エラーや設定エラーを特定し、実行時の失敗や部分的なデータ書き込みのリスクを減らす。",
+jp:"Validate ボタン＝構文・設定チェックのみでデータは処理しない、という機能の範囲を正確に理解する。"
+}
+,
+{
+n:16, d:"Structured Streaming",
+q:"Spark Structured Streaming で遅れて到着するデータを扱うために使える技術はどれですか。",
+o:[
+ {t:"Windowing", c:false, e:"時間ウィンドウへの集計の振り分けであり、遅延データそのものへの対処ではない。"},
+ {t:"Watermarking", c:true, e:"正解。イベント時刻の進行を追跡し、ウィンドウを完了とみなす前に遅延データをどれだけ待つかを指定できるようにする。"},
+ {t:"Checkpointing", c:false, e:"ストリーム処理の進捗を追跡・再開するための仕組みであり、遅延データの扱いとは別の目的。"},
+ {t:"Partitioning", c:false, e:"データレイアウトの技術であり、遅延データの扱いとは無関係。"}
+],
+ov:"Spark Structured Streaming では、主にウォーターマーキングを使って遅れて到着するデータを扱う。これによりシステムはイベント時刻の進行を追跡でき、ウィンドウを完了とみなす前に遅延データをどれだけ待つかを指定できる。",
+jp:"遅延データ対策＝watermarking、という一問一答レベルの基本知識。checkpointing(再開)、partitioning(レイアウト)との役割の違いを明確に。"
+},
+{
+n:17, d:"パフォーマンス最適化",
+q:"データエンジニアリングチームが次のコードで3つの Delta テーブル間の結合を行っています。\n\ndf_students =  spark.table(\"students\")\ndf_courses =  spark.table(\"courses\")\ndf_enrollments =  spark.table(\"enrollments\")\n\ndf_join_1  = (df_students.join(df_enrollments, df_students.student_id == df_enrollments.student_id)\n                        .select(df_students.student_id,\n                                df_students.student_name,\n                                df_enrollments.course_id)\n              )\n\ndf_join_2 = (df_join_1.join(df_courses, df_join_1.course_id == df_courses.course_id)\n                       .select(df_join_1.student_id,\n                               df_join_1.student_name,\n                               df_courses.course_name)\n\t    )\n\n(df_join_2.write\n.mode(\"overwrite\")\n.table(\"students_courses_details\"))\n\nこのコードブロックを実行するたびに何が起きますか。",
+o:[
+ {t:"ソーステーブルの現バージョンの全レコードが結合操作の対象になる。一致しないレコードで students_courses_details テーブルが上書きされる", c:false, e:"デフォルトの join は inner join のため一致しない(unmatched)レコードは結果に含まれない。"},
+ {t:"いずれかのソーステーブルに新しく追加されたレコードのみが結合操作の対象になる。一致したレコードで上書きされる", c:false, e:"spark.table() は静的な読み込みであり、テーブルの現バージョン全体を毎回読む。新規追加分のみを対象にはしない。"},
+ {t:"ソーステーブルの現バージョンの全レコードが結合操作の対象になる。一致したレコードで students_courses_details テーブルが上書きされる", c:true, e:"正解。spark.table() は静的なテーブル読み込みであり、現バージョンの全レコードが対象になる。既定の inner join なので一致したレコードのみが結果となり、overwrite モードでテーブル全体が置き換わる。"},
+ {t:"いずれかのソーステーブルに新しく追加されたレコードのみが対象になる。一致しないレコードで上書きされる", c:false, e:"新規追加分のみを対象にする挙動でも unmatched が結果になる挙動でもない。"}
+],
+ov:"このクエリは spark.table() 関数を使って3つの静的な Delta テーブルを読み込んでおり、これらのテーブルの現バージョンにあるすべてのレコードが読み込まれ、結合操作の対象になる。spark.table() と spark.read.table() 関数に違いはない。実際には spark.read.table() は内部で spark.table() を呼び出している。pyspark.sql.DataFrame.join() 関数は既定で内部結合(inner join)を実行するため、一致したレコードのみがターゲットテーブルへ書き込まれる。今回のクエリは「overwrite」モードでターゲットテーブルへ書き込んでおり、テーブルを完全に上書きする。",
+jp:"spark.table() ＝静的読み込み(常に現バージョン全体を読む)。デフォルトのjoinはinner(一致分のみ)。overwrite ＝テーブル全体を置き換える。3つの性質を掛け合わせて結果を導く総合問題。"
+},
+{
+n:18, d:"Lakeflow SDP",
+q:"SDP パイプラインのイベントログテーブルから、プログラム的にデータ品質の結果を抽出したい場合、正しいコードはどれですか。",
+o:[
+ {t:"SELECT expectations FROM ... WHERE event_type = 'metrics'", c:false, e:"データ品質の結果は 'metrics' イベントではなく 'flow_progress' イベントに記録される。"},
+ {t:"SELECT expectations FROM ... WHERE event_type = 'flow_progress'", c:false, e:"event_type の指定は正しいが、expectations は details 列の中のネストしたフィールドであり、トップレベルの列としては存在しない。"},
+ {t:"SELECT details:flow_progress.data_quality.expectations FROM ... WHERE event_type = 'flow_progress'", c:true, e:"正解。details 列内の details:flow_progress.data_quality.expectations というネストされた JSON パスから期待値の結果を取得する。"},
+ {t:"SELECT data_quality FROM ... WHERE event_type = 'metrics'", c:false, e:"event_type も列の指定も誤り。"}
+],
+ov:"SDP パイプラインのイベントログテーブルでは、データ品質の結果は 'flow_progress' というタイプのイベントに記録され、details 列の中にネストされた JSON 構造として保存される。details:flow_progress はパイプラインの実行進捗に関する情報を含み、details:flow_progress.data_quality はデータ品質の結果(期待値、削除されたレコード数など)を含み、details:flow_progress:data_quality.expectations は具体的に期待値の結果を保持する。",
+jp:"イベントログの構造：event_type='flow_progress' の details 列にネストされた JSON。details:flow_progress.data_quality.expectations というパスをそのまま暗記する。"
+},
+{
+n:19, d:"パフォーマンス最適化",
+q:"Delta テーブルで Automatic Liquid Clustering を有効にするために必要な前提条件を2つ選んでください。",
+o:[
+ {t:"テーブルが Unity Catalog の外部テーブルであること", c:false, e:"逆。外部テーブルではなくマネージドテーブルである必要がある。"},
+ {t:"テーブルが Unity Catalog のマネージドテーブルであること", c:true, e:"正解。Automatic Liquid Clustering は Unity Catalog が管理するテーブルでのみ機能し、外部テーブルは現在サポートされない。"},
+ {t:"テーブルで Predictive Optimization が有効になっていること", c:true, e:"正解。Predictive Optimization がアクセスパターンに関する知見をシステムへ提供し、Liquid Clustering がそれを活用してデータレイアウトを自動的に最適化する。"},
+ {t:"テーブルで deletion vectors が有効になっていること", c:false, e:"Automatic Liquid Clustering の前提条件ではない。"},
+ {t:"テーブルが日付列でパーティションされていること", c:false, e:"Liquid Clustering はパーティションの代替であり、パーティション化されていることは前提条件ではない。"}
+],
+ov:"Databricks で Delta テーブルに Automatic Liquid Clustering を有効にするには2つの前提条件が必要である。①テーブルが Unity Catalog のマネージドテーブルであること。Automatic Liquid Clustering は Unity Catalog が管理するテーブルでのみ機能し、外部テーブルは現在サポートされない。②テーブルで Predictive Optimization が有効になっていること。Predictive Optimization はアクセスパターンに関する知見をシステムへ提供し、Liquid Clustering がそれを活用してデータレイアウトを自動的に最適化する。",
+jp:"Automatic Liquid Clustering の前提条件2つ：①Unity Catalogマネージドテーブル ②Predictive Optimization 有効。Q30(クラスタリングキーの決定方法)と合わせて Automatic Liquid Clustering の全体像を理解する。"
+},
+{
+n:20, d:"開発ツール・Git",
+q:"Databricks における Python wheel の用途を最もよく説明しているのはどれですか。",
+o:[
+ {t:"Python wheel は 'pip' に代わるパッケージインストーラーツールである", c:false, e:"wheel はパッケージ形式であり、pip の代替ツールではない(pip が wheel をインストールする)。"},
+ {t:"Python wheel は、Databricks ワークスペース内で Python バイナリやアーティファクトをホスト・管理・配布するためのリポジトリである", c:false, e:"リポジトリではなく配布形式(パッケージファイル)そのものを指す。"},
+ {t:"Python wheel は、ノートブック内の Python インタプリタ・ライブラリ・モジュールを他のノートブックから隔離するための仮想環境である", c:false, e:"仮想環境ではない。"},
+ {t:"Python wheel は、Databricks クラスターにカスタムの Python コードパッケージをインストールするためのバイナリ配布形式である", c:true, e:"正解。wheel は .whl 拡張子を持つ ZIP 形式のアーカイブである。"}
+],
+ov:"Python wheel は、Databricks クラスターにカスタムの Python コードパッケージをインストールするためのバイナリ配布形式である。wheel は .whl 拡張子を持つ ZIP 形式のアーカイブである。",
+jp:"wheel は『パッケージのバイナリ配布形式』という定義を正確に押さえる。%pip install my_package.whl(Q43)でこの形式のファイルをインストールする、という関連知識とセットで覚える。"
+},
+{
+n:21, d:"Lakeflow SDP",
+q:"あるデータエンジニアが SDP で次のコードを使って CDC データを処理しています。\n\nCREATE OR REFRESH STREAMING TABLE cdc_target;\n\nCREATE FLOW cdc_flow AS AUTO CDC INTO users_target\nFROM stream(users_raw)\nKEYS (user_id)\nAPPLY AS DELETE WHEN operation = \"DELETE\"\nSEQUENCE BY updated_timestamp\nCOLUMNS *;\n\nこのコードを実行した後、users_target テーブルに加えて、メタストアに次の2つのオブジェクトが作成されていることに気づきました。\n・users_target という名前のビュー\n・__apply_changes_storage_users_target という名前のテーブル\n\nこれらのオブジェクトの目的を正しく説明しているのはどれですか。",
+o:[
+ {t:"users_target ビューは生データのマテリアライズされたスナップショットで、__apply_changes_storage_users_target は監査目的のユーザー活動ログを保存する", c:false, e:"監査ログの保存が目的ではない。"},
+ {t:"これらのオブジェクトは、SEQUENCE BY を活用した内部の CDC 処理のために使われ、tombstone や版数といった、順序が乱れたデータを扱うために必要な追加情報を持つ", c:true, e:"正解。__apply_changes_storage_users_target は削除された行を示す『tombstone』マーカーとバージョニングのメタデータを保持し、順序が乱れた、あるいは遅れて到着したイベントを正しく適用できるようにする内部ストレージテーブル。users_target ビューはこの内部テーブルの上にある仮想レイヤーで、データの現在の状態をクリーンなクエリ可能なスナップショットとして提示する。"},
+ {t:"users_target ビューはクエリを高速化するためのターゲットテーブルへの仮想インデックスであり、__apply_changes_storage_users_target は元の users_target インデックスのバックアップである", c:false, e:"インデックスやバックアップの仕組みではない。"},
+ {t:"users_target ビューと __apply_changes_storage_users_target テーブルは書き込み最適化のために作られた一時オブジェクトであり、パイプライン実行後すぐに削除される", c:false, e:"一時オブジェクトではなく、CDC 処理の整合性維持に必須の永続的な内部オブジェクト。"}
+],
+ov:"SDP で APPLY AS DELETE や SEQUENCE BY のような操作を使って CDC フローを作成すると、システムは、シーケンスキーに基づいて正しい順序を保ちながら、挿入・更新・削除を含む増分更新を管理する仕組みを必要とする。__apply_changes_storage_users_target テーブルは、削除された行の『tombstone』マーカーとバージョニングのメタデータとともにこうした変更を追跡する内部ストレージテーブルであり、順序が乱れた、あるいは遅れて到着したイベントが正しく適用されることを保証する。この内部テーブルは直接クエリすることを意図したものではないが、CDC の一貫性を維持するために不可欠である。一方 users_target ビューは、この内部テーブルの上に置かれた仮想レイヤーで、データの現在の状態をクリーンでクエリ可能なスナップショットとして提示する。これにより CDC のロジックがカプセル化され透過的なまま保たれる。",
+jp:"AUTO CDC が裏で作る2つの補助オブジェクトの役割：__apply_changes_storage_<table>(tombstone・バージョン管理を含む内部ストレージ)、<table>という名のビュー(現在状態のクリーンなスナップショット)。直接クエリするのはビューの方。"
+},
+{
+n:22, d:"Delta Lake",
+q:"products テーブル(name, category, expiration_date, price)に対し SELECT * FROM products WHERE price > 30.5 を実行するとき、対象のデータファイルを特定するためにクエリオプティマイザが活用するのはどれですか。",
+o:[
+ {t:"Parquet ファイルのメタデータ内の列統計", c:false, e:"Delta Lake が使うのは Parquet 自体のメタデータではなくトランザクションログの統計。"},
+ {t:"Hive メタストア内の列統計", c:false, e:"統計はトランザクションログにあり Hive メタストアではない。"},
+ {t:"Unity Catalog メタストア内のファイル統計", c:false, e:"統計は Unity Catalog メタストアではなくトランザクションログに保存される。"},
+ {t:"Delta トランザクションログ内のファイル統計", c:true, e:"正解。トランザクションログには各データファイルについてのレコード数・最小値・最大値・NULL数の統計が記録されており、オプティマイザはこれを使って条件に一致しうるファイルを特定する。"}
+],
+ov:"トランザクションログの中で、Delta Lake はテーブルの各データファイルについて統計を捕捉する。これらの統計はファイルごとに、レコード総数、テーブルの最初の32列における各列の最小値、各列の最大値、各列の NULL 件数を示す。選択的なフィルタを持つクエリがテーブルに対して実行されると、クエリオプティマイザはこれらの統計を使ってクエリ結果を生成する。すなわち条件フィルタに一致するレコードを含みうるデータファイルを特定するためにこれらを活用する。この設問の SELECT クエリでは、price 列の最小値・最大値の統計についてトランザクションログがスキャンされる。",
+jp:"Exam1 Q7・Q28・Exam2の関連問題と同一知識だが、今回は『どこに保存されているか』を4択で厳密に問うている。トランザクションログ、という一点を確実に。"
+},
+{
+n:23, d:"ジョブ・ワークフロー",
+q:"複数タスクを持つジョブ(実行に2時間以上かかる)で、最後のタスクが予期せず失敗しました。実行時間を最小限に抑えつつこの実行を完了させる方法はどれですか。",
+o:[
+ {t:"失敗した実行を削除し、ジョブの新しい実行を開始する", c:false, e:"すべてのタスクを最初からやり直すことになり、時間がかかる。"},
+ {t:"このジョブ実行を再実行してすべてのタスクを実行する", c:false, e:"成功したタスクも含めてすべて再実行することになり非効率。"},
+ {t:"このジョブ実行を修復(repair)し、失敗したタスクのみを再実行する", c:true, e:"正解。失敗したタスクのサブセットと、それに依存するタスクのみを再実行できる。成功したタスクは再実行されないため、時間とリソースを節約できる。"},
+ {t:"失敗した実行はそのままにして、ジョブの新しい実行を単純に開始する", c:false, e:"失敗した実行を完了させるという目的を達成しない。"}
+],
+ov:"失敗した部分集合のタスクとそれに依存するタスクのみを実行することで、失敗したマルチタスクジョブを修復できる。成功したタスクは再実行されないため、この機能は失敗したジョブ実行からの復旧に必要な時間とリソースを削減する。",
+jp:"Repair run の主目的＝成功済みタスクの再実行を避けて時間を節約すること。Exam1 Q8(Repair run 時のパラメータ変更は一時的)と合わせて Repair run の機能全体を理解する。"
+},
+{
+n:24, d:"ジョブ・ワークフロー",
+q:"複数のデータアナリストが、基本的なデータ探索・小規模データセットへのクエリ・Python と SQL での分析を行うプロジェクトのために、対話型クラスターを構成してほしいと依頼しています。この用途に最も適したクラスターアクセスモードはどれですか。",
+o:[
+ {t:"SINGLE USER", c:false, e:"単一ユーザー向けの隔離された運用ワークロード向けであり、チームでの共同作業には適さない。"},
+ {t:"NO_ISOLATION_SHARED", c:false, e:"データ隔離が最小限であり、マルチユーザー環境ではセキュリティ上の懸念から一般に推奨されない。"},
+ {t:"DEDICATED", c:false, e:"専門的なワークロードやグループ単位の安全な連携向けであり、通常の Python/SQL 分析には過剰。"},
+ {t:"STANDARD", c:true, e:"正解。一般的なワークロード向けに共有アクセスを提供しつつユーザー間のワークロードを分離でき、Python と SQL のワークロードを効率的に扱える。"}
+],
+ov:"探索的な分析、小規模データセットへのクエリ、Python と SQL のワークロードを共同で実行するアナリストのチームには、STANDARD クラスターアクセスモードが最も適した選択である。Standard クラスターは、一般的なワークロード向けにクラスターリソースへの共有アクセスを提供しつつ、ユーザーのワークロードを互いに分離するよう設計されている。Python と SQL のワークロードを効率的に扱い、このプロジェクトが R・MLlib・RDD ベースのタスクといった専門的な計算を含まないため、Dedicated Access モードの追加機能は不要である。",
+jp:"アクセスモードの使い分け：STANDARD(チームでの一般的な共有分析)、DEDICATED/SINGLE USER(専門的・隔離が必要なワークロード)、NO_ISOLATION_SHARED(推奨されない旧来のモード)。"
+},
+{
+n:25, d:"パフォーマンス最適化",
+q:"Spark UI の Stage の詳細ページに表示される指標に含まれないものはどれですか。",
+o:[
+ {t:"Duration", c:false, e:"含まれる指標。タスクの所要時間。"},
+ {t:"GC time", c:false, e:"含まれる指標。JVM のガベージコレクションにかかった合計時間。"},
+ {t:"Spill(Disk and Memory)", c:false, e:"含まれる指標。シャッフルスピルのメモリ・ディスクへの書き出し量。"},
+ {t:"DBU Cost", c:true, e:"正解(＝含まれない)。DBU は課金のための単位であり、クラスター構成に依存する。Spark UI の一部ではない。"}
+],
+ov:"Spark UI の Stage の詳細ページには、完了したタスクのサマリー指標が表示される。これには、タスクの Duration、JVM のガベージコレクション時間である GC time、シャッフルされたデータのメモリ上での非シリアライズ形式のサイズである Shuffle spill(memory)、ディスク上でのシリアライズ形式のサイズである Shuffle spill(disk)などが含まれる。DBU Cost は Spark UI の一部ではない。DBU は Databricks Unit の略で、課金目的の1時間あたりの処理能力の単位であり、クラスター構成に依存する。",
+jp:"Spark UI の Stage 詳細に含まれる指標(Duration, GC time, Shuffle spill)と、含まれないもの(DBU Cost＝課金の単位で別のダッシュボードの領域)を区別する。"
+},
+{
+n:26, d:"Delta Lake",
+q:"CREATE TABLE customers_clone LOCATION 'dbfs:/mnt/backup' AS SELECT * FROM customers で作成したテーブルに対し DROP TABLE customers_clone を実行すると、どうなりますか。",
+o:[
+ {t:"customers テーブルからシャロークローンされているためエラーが発生する", c:false, e:"このテーブルは SHALLOW CLONE ではなく LOCATION 付き CTAS で作られている。"},
+ {t:"VACUUM コマンドが実行されるまでテーブルは削除されない", c:false, e:"外部テーブルの DROP TABLE は即座にメタデータのみを削除する。"},
+ {t:"テーブルのメタデータとデータファイルの両方が削除される", c:false, e:"これはマネージドテーブルの挙動。このテーブルは LOCATION 指定があるため外部テーブル。"},
+ {t:"テーブルのメタデータのみがカタログから削除され、データファイルはストレージに残る", c:true, e:"正解。LOCATION 句で作成された外部(アンマネージド)テーブルは、DROP TABLE を実行するとメタデータのみが削除され、基盤のデータファイルは保持される。"}
+],
+ov:"外部(アンマネージド)テーブルは、LOCATION 句を使って外部のストレージパスにデータが保存されるテーブルである。外部テーブルに対して DROP TABLE を実行すると、テーブルのメタデータのみが削除され、基盤のデータファイルは保持される。",
+jp:"Exam2 Q29(LOCATIONなし＝マネージド＝データも削除)と対になる問題。LOCATION の有無だけで DROP TABLE の挙動(メタデータのみ/データも含む)が変わる、という決定的な分岐点。"
+},
+{
+n:27, d:"Structured Streaming",
+q:".png ファイルのみを処理するよう、Auto Loader のストリーミング取り込みスクリプトを修正します。cloudFiles.format=\"binaryFile\" を指定した readStream で、空欄に入る正しいオプション名はどれですか。",
+o:[
+ {t:"cloudFiles.fileExtension", c:false, e:"そのようなオプション名は存在しない。"},
+ {t:"pathGlobFilter", c:true, e:"正解。Auto Loader を使う際、*.png のようなグロブパターンに基づいて入力ファイルを絞り込める。"},
+ {t:"fileExtension", c:false, e:"そのようなオプション名は存在しない。"},
+ {t:"cloudFiles.pathGlobFilter", c:false, e:"cloudFiles. のプレフィックスは不要で、正しくは pathGlobFilter 単体で指定する。"}
+],
+ov:"pathGlobFilter オプションは、Auto Loader を使う際に *.png のようなグロブパターンに基づいて入力ファイルを絞り込めるようにする。",
+jp:"Exam1 Q35と同じ知識。オプション名は pathGlobFilter(cloudFiles.のプレフィックスなし)。この綴りの正確な暗記が問われる。"
+},
+{
+n:28, d:"Delta Lake",
+q:"insert-only merge を実行できるコマンドはどれですか。",
+o:[
+ {t:"WHEN NOT MATCHED THEN INSERT * ／ WHEN MATCHED THEN IGNORE *", c:false, e:"IGNORE * という構文は MERGE INTO には存在しない。"},
+ {t:"WHEN NOT MATCHED THEN INSERT * のみ", c:true, e:"正解。NOT MATCHED 句のみを指定することで、ソース行がマージ条件(マージキー)に基づいてどのターゲット行とも一致しない場合にのみ挿入され、既存レコードと同じキーを持つ行は単に無視される。"},
+ {t:"WHEN MATCHED THEN INSERT * のみ", c:false, e:"MATCHED 節に INSERT は使えない(一致した行には UPDATE か DELETE を使う)。"},
+ {t:"WHEN MATCHED THEN INSERT * ／ WHEN NOT MATCHED THEN IGNORE *", c:false, e:"MATCHED 節への INSERT も IGNORE * という構文も誤り。"}
+],
+ov:"insert-only merge の構文は、MERGE INTO target_table USING source_table ON merge_condition WHEN NOT MATCHED THEN INSERT * である。NOT MATCHED 句のみを指定すればよく、これはマージ条件(マージキー)に基づいてソース行がどのターゲット行とも一致しない場合に行を挿入する。テーブル内の既存レコードと同じキーを持つレコードは単に無視される。",
+jp:"insert-only merge＝WHEN NOT MATCHED THEN INSERT * のみを指定(WHEN MATCHED句は書かない)。ストリーミングの重複排除(Exam1 Q10・Exam2 Q49)でこの構文が実際に使われる。"
+},
+{
+n:29, d:"Lakeflow SDP",
+q:"CONSTRAINT valid_id EXPECT (id IS NOT NULL) _____ という制約定義で、違反したレコードを削除しつつメトリクスに記録させたい場合、空欄に入る句はどれですか。",
+o:[
+ {t:"ON VIOLATION DROP ROW", c:true, e:"正解。id が NULL のレコードはパイプラインから自動的に削除されるが、パイプラインのメトリクスでは引き続き追跡され、ジョブ全体を失敗させることなく違反数を監視できる。"},
+ {t:"ON VIOLATION DISCARD ROW", c:false, e:"そのような句は存在しない。"},
+ {t:"ON VIOLATION DELETE ROW", c:false, e:"そのような句は存在しない。"},
+ {t:"ON VIOLATION FAIL UPDATE", c:false, e:"これは削除ではなく更新を失敗させる句であり、要件と異なる。"}
+],
+ov:"正しい句は ON VIOLATION DROP ROW であり、完全な制約は CONSTRAINT valid_id EXPECT (id IS NOT NULL) ON VIOLATION DROP ROW となる。これにより id が NULL のレコードはパイプラインから自動的に削除されるが、パイプラインのメトリクスでは引き続き追跡され、ジョブ全体を失敗させることなく違反数を監視できる。",
+jp:"ON VIOLATION 句は DROP ROW と FAIL UPDATE の2種類のみ(既定は句なしで残す＝Exam2 Q28)。expect_or_drop / expect_or_fail のデコレータ記法と、この ON VIOLATION 句による記法は等価な表現である点も押さえる。"
+},
+{
+n:30, d:"パフォーマンス最適化",
+q:"Unity Catalog マネージドの Delta テーブルで、Automatic Liquid Clustering はどうやってクラスタリングキーとして使う列を決定しますか。",
+o:[
+ {t:"Predictive Optimization を活用し、観測されたクエリの挙動に基づいて最適なクラスタリングキーを選ぶ", c:true, e:"正解。クエリの挙動分析を使って動的にクラスタリングキーを選択する。"},
+ {t:"高度なサンプリング戦略を活用し、全ファイルにデータを均等に配分した後で列選択をランダム化する", c:false, e:"そのような仕組みではない。"},
+ {t:"テーブル作成時に指定された事前定義のクラスタリング列から、賢く選択する", c:false, e:"CLUSTER BY AUTO では列を事前に指定しない。"},
+ {t:"スキーマ内の列定義の型と順序に基づいて、最適なクラスタリングキーを自動的に決定する", c:false, e:"型や定義順ではなく、実際のクエリの挙動に基づいて決定される。"}
+],
+ov:"Databricks の Automatic Liquid Clustering は、アクセスパターンとメタデータの統計に基づいて Delta テーブル内のデータの物理レイアウトを自動的に最適化するよう設計された機能である。クエリの挙動分析を使ってクラスタリングキーを動的に選択する Predictive Optimization を活用する。",
+jp:"Q19(前提条件)と対になる知識。Automatic Liquid Clustering がキーを決める根拠＝Predictive Optimization による観測されたクエリ挙動。スキーマの型や列順とは無関係、という引っかけに注意。"
+}
+,
+{
+n:31, d:"Unity Catalog・ガバナンス",
+q:"外部パートナーとの Delta Sharing の設定中に、パートナーの「sharing identifier(共有識別子)」を尋ねました。Databricks-to-Databricks Sharing における sharing identifier を最もよく説明しているのはどれですか。",
+o:[
+ {t:"受信側の Unity Catalog メタストアを一意に参照するものである", c:true, e:"正解。<cloud>:<region>:<uuid> という形式の文字列で、受信側の Unity Catalog メタストアを識別する。"},
+ {t:"パートナーのテーブルへの書き込み時に使う公開暗号鍵として機能する", c:false, e:"暗号鍵ではない。"},
+ {t:"ファイアウォールのホワイトリスト登録のためにパートナーのネットワーク IP アドレスを識別する", c:false, e:"IP アドレスの識別ではない。"},
+ {t:"受信側のエンドポイントとの API 呼び出しの認証トークンとして機能する", c:false, e:"認証トークンではない。"}
+],
+ov:"Delta Sharing の識別子は、Databricks-to-Databricks 共有において受信側の Unity Catalog メタストアを識別するために使われる一意の文字列である。この識別子により、データ提供側は共有データへのアクセスを許可できる。形式は <cloud>:<region>:<uuid> で、たとえば aws:us-west-2:19a84bee-54bc-43a2-87de-023d0ec16016 のようになる。ここで aws はクラウドプロバイダー(Amazon Web Services)、us-west-2 は具体的な AWS リージョン、残りの部分は受信側の Unity Catalog メタストアの UUID(Universally Unique Identifier)を表す。受信側は Catalog Explorer や SELECT CURRENT_METASTORE(); のような SQL クエリを実行することで、自身の Databricks ワークスペースから sharing identifier を取得できる。この識別子はデータ提供側へ渡され、提供側はそれを使って受信者(recipient)を作成し共有へのアクセスを許可する。",
+jp:"sharing identifier の形式：<cloud>:<region>:<uuid>。取得コマンド SELECT CURRENT_METASTORE(); も併せて覚える。"
+},
+{
+n:32, d:"ジョブ・ワークフロー",
+q:"Databricks REST API で既存ジョブを実行するとき、新しくトリガーされた実行の全体で一意な識別子を表すのはどれですか。",
+o:[
+ {t:"run_key", c:false, e:"そのようなフィールドは存在しない。"},
+ {t:"job_id", c:false, e:"ジョブ自体を識別する ID であり、個々の実行を識別するものではない。"},
+ {t:"run_id", c:true, e:"正解。'/api/2.2/jobs/run-now' エンドポイントを介して既存ジョブを実行すると、トリガーされた実行の run_id が返される。"},
+ {t:"task_id", c:false, e:"個々のタスクを識別する ID であり、実行全体を識別するものではない。"}
+],
+ov:"'/api/2.2/jobs/run-now' エンドポイントを介して既存のジョブを実行すると、トリガーされた実行の run_id が返される。これはこの新しくトリガーされた実行の、全体で一意な識別子を表す。",
+jp:"job_id(ジョブ自体) と run_id(個々の実行) の区別。run-now エンドポイントが返すのは run_id。"
+},
+{
+n:33, d:"パフォーマンス最適化",
+q:"Optimized Writes と Auto Compaction を有効にした上で、Auto Compaction にも Z-order インデックスを組み合わせてすべてのテーブルでデータスキッピングを活用したい場合、正しい方法はどれですか。",
+o:[
+ {t:"spark.conf.set(\"spark.databricks.delta.autoZorder.enabled\", True) を使う", c:false, e:"そのような設定は存在しない。"},
+ {t:"Auto Compaction は Z-Ordering をサポートしないため、Auto Compaction に Z-order インデックスを組み合わせる方法は存在しない", c:true, e:"正解。Z-Ordering は単なる圧縮より大幅にコストが高いため、Auto Compaction ではサポートされない。"},
+ {t:"Z-order インデックスと Auto Compaction は、ALTER TABLE table_name SET TBLPROPERTIES (delta.autoOptimize.zorder.enabled = true) を使ってテーブルごとに個別にしか有効化できない", c:false, e:"そのようなテーブルプロパティは存在しない。"},
+ {t:"spark.conf.set(\"spark.databricks.delta.autoCompact.zorder.enabled\", True) を使う", c:false, e:"そのような設定は存在しない。"}
+],
+ov:"Auto Compaction は Z-Ordering をサポートしない。Z-Ordering は単なる圧縮に比べて大幅にコストが高いため。",
+jp:"Auto Compaction と Z-Ordering は併用不可、という点を複数の切り口(設定名の存在を問う選択肢)で問う出題。"
+},
+{
+n:34, d:"Unity Catalog・ガバナンス",
+q:"グローバル物流企業が、特定のデータセットと分析ノートブックを、社内 Databricks アカウントへのアクセス権を持たない外部の分析ベンダー(同じく Databricks クライアント)と共有したい。データは Unity Catalog 内の Delta テーブルとして保存されています。最も効果的で安全な共有方法はどれですか。",
+o:[
+ {t:"Delta Sharing で Delta テーブルを共有し、各ノートブックへは組み込みのコラボレーション機能でアクセスを付与する", c:false, e:"ノートブックの共有には別の機能を使うことになり、統一的で効率的な方法ではない。"},
+ {t:"Delta Sharing で Delta テーブルを共有し、すべてのノートブックを1つの DBC ファイルにまとめて送る", c:false, e:"手作業でのファイル送付は安全性・スケーラビリティの面で劣る。"},
+ {t:"Delta Sharing で Delta テーブルとノートブックの両方を共有する", c:true, e:"正解。Databricks-to-Databricks Delta Sharing は、テーブル・ノートブック・ボリューム・ML モデルを他の Databricks クライアントと安全かつオープンにリアルタイムで共有できる。同じ Databricks アカウントやワークスペースへのアクセスを必要としない。"},
+ {t:"Delta Sharing で Delta テーブルを共有し、ノートブックはプログラム的に HTML ページとして公開する", c:false, e:"HTML化は共有の統一的な仕組みではなく、ガバナンスの一貫性にも欠ける。"}
+],
+ov:"Databricks-to-Databricks Delta Sharing は、テーブル・ノートブック・ボリューム・ML モデルを、他の Databricks クライアントと安全でオープン、かつリアルタイムに共有できるようにする。これは同じ Databricks アカウントやワークスペースへのアクセスを相手が持つことを必要としない。Unity Catalog を使うことで、企業はきめ細かなアクセス制御とガバナンスを確保できる。このアプローチは効率的でスケーラブルであり、エンタープライズグレードのセキュリティ基準に準拠する。",
+jp:"Exam2 Q13の応用。Databricks-to-Databricks プロトコルなら、テーブルとノートブックを同じ仕組み(Delta Sharing)で一括して安全に共有できる、という統一性がポイント。"
+},
+{
+n:35, d:"Delta Lake",
+q:"Delta Lake のファイル統計に関する記述として正しくないものはどれですか。",
+o:[
+ {t:"Delta Lake はトランザクションログに、追加された各データファイルについての統計を捕捉する", c:false, e:"正しい記述。"},
+ {t:"カーディナリティが非常に高い文字列フィールドでは、統計は一般に有用な情報をもたらさない", c:false, e:"正しい記述。値が多様すぎるとmin/maxの絞り込み効果が薄れる。"},
+ {t:"統計は選択的なクエリを実行する際のデータスキッピングに活用される", c:false, e:"正しい記述。"},
+ {t:"テーブルの最初の32列を数える際、ネストされたフィールドはカウントされない", c:true, e:"正解(＝誤った記述)。ネストされたフィールドは最初の32列を数える際にカウントされる。たとえば8つのネストフィールドを持つ4つの構造体フィールドは合計32列としてカウントされる。"}
+],
+ov:"Delta Lake はテーブルに追加された各データファイルについて、トランザクションログに統計を自動的に捕捉する。既定では Delta Lake は各テーブルの最初の32列について統計を収集する。ネストされたフィールドは、最初の32列を数える際にカウントされる(例：8つのネストフィールドを持つ4つの構造体フィールドは合計32列としてカウントされる)。",
+jp:"ネストされたフィールド(struct内のフィールド)も32列のカウントに含まれる、という細かい仕様。struct型が多いスキーマでは想定より少ない列数しか統計対象にならない可能性がある、という実務上の注意点。"
+},
+{
+n:36, d:"Unity Catalog・ガバナンス",
+q:"Databricks Secrets へのアクセス権を持つユーザーが、ノートブックでシークレットの値を表示できてしまうという話を聞きました。Databricks Secrets の値を平文で出力する回避策として考えられるのはどれですか。",
+o:[
+ {t:"dbutils.secrets.get(\"prod-scope\", \"db-password\", redacted=False) のように redacted 引数を指定して print する", c:false, e:"dbutils.secrets.get にそのような引数は存在しない。"},
+ {t:"dbutils.secrets.get(...) の結果を display(db_password) で表示する", c:false, e:"display() も文字列一致による伏せ字化の対象となり平文では出ない。"},
+ {t:"print(db_password, redacted=False) のように print 関数へ引数を指定する", c:false, e:"print() にそのような引数は存在せず、そもそも伏せ字化はシステム側の文字列一致処理による。"},
+ {t:"取得したシークレットの文字を1文字ずつループして print する", c:true, e:"正解(＝回避策として機能してしまう)。伏せ字化は値全体の文字列一致に基づくため、1文字ずつ分割して出力すると検出を回避できてしまう。"}
+],
+ov:"Databricks は dbutils.secrets.get() で読み取ったシークレットの値を伏せ字にする。ノートブックのセル出力に表示される際、シークレットの値は [REDACTED] という文字列に置き換えられる。しかし、シークレットの各文字を1文字ずつループして出力するという回避策により、Databricks シークレットの値を平文で出力できてしまう可能性がある。",
+jp:"この設問は『技術的にできてしまう回避策』を問う出題で、実際にこれを行うことはセキュリティポリシー違反になりうる点に注意。伏せ字化が文字列一致ベースであるという仕組み上の弱点を理解する目的の出題。"
+},
+{
+n:37, d:"Unity Catalog・ガバナンス",
+q:"マーケティング部門のデータサイエンティストが、BI カタログの analytics スキーマにある customer_insights テーブルへの読み取り専用アクセスを必要としています。最小権限の原則に従って正しくアクセスを付与する SQL コマンドはどれですか。",
+o:[
+ {t:"GRANT SELECT ON TABLE bi.analytics.insights TO marketing_team; ／ GRANT USE SCHEMA ON SCHEMA bi.analytics TO marketing_team;", c:false, e:"USE CATALOG の付与が抜けており、これだけではカタログを経由してスキーマ・テーブルへアクセスできない。"},
+ {t:"GRANT SELECT ON TABLE bi.analytics.insights TO marketing_team; ／ GRANT USE SCHEMA ON SCHEMA bi.analytics TO marketing_team; ／ GRANT USE CATALOG ON CATALOG bi TO marketing_team;", c:true, e:"正解。特定のテーブルにアクセスするには、テーブル自体への SELECT、それを含むスキーマへの USE SCHEMA、親カタログへの USE CATALOG の3つすべてが必要。"},
+ {t:"GRANT SELECT ON TABLE bi.analytics.insights TO marketing_team; のみ", c:false, e:"USE CATALOG と USE SCHEMA が抜けており、カタログ・スキーマの階層を通過できない。"},
+ {t:"GRANT SELECT ON TABLE bi.analytics.insights TO marketing_team; ／ GRANT USE CATALOG ON CATALOG bi TO marketing_team;", c:false, e:"USE SCHEMA の付与が抜けている。"}
+],
+ov:"特定のテーブルにアクセスするには、ユーザーはテーブル自体への SELECT、それを含むスキーマへの USE SCHEMA、そして親カタログへの USE CATALOG を付与される必要がある。これにより読み取り操作に十分なだけのアクセスを与え、過剰な権限付与を避けられる。",
+jp:"UC の3階層すべてを通過する必要がある、という原則(Exam1 Q45とも関連)。テーブルへのSELECTだけでは不十分で、USE CATALOG と USE SCHEMA も忘れずに付与する。最小権限の原則の実例。"
+},
+{
+n:38, d:"開発ツール・Git",
+q:"GitHub 上で完全自動化された CI/CD パイプラインで Declarative Automation Bundles(DABs)を使いたい場合、ターゲットの Databricks ワークスペースへの認証方法として推奨されるのはどれですか。",
+o:[
+ {t:"Databricks サービスプリンシパルの個人アクセストークン(PAT)", c:false, e:"シークレットとしてトークンを管理する必要があり、推奨される方法ではない。"},
+ {t:"Databricks サービスプリンシパルの OAuth クライアントシークレット", c:false, e:"クライアントシークレットもシークレット管理が必要になる。"},
+ {t:"管理者ユーザーの個人アクセストークン(PAT)", c:false, e:"管理者個人のトークンを使うのはセキュリティ上望ましくなく、推奨される方法でもない。"},
+ {t:"Databricks サービスプリンシパルの OAuth トークンフェデレーション", c:true, e:"正解。CLI が Databricks のシークレットを管理せずに認証できるよう、ターゲットワークスペースのサービスプリンシパルに対する OAuth トークンフェデレーションの使用が推奨される。"}
+],
+ov:"Declarative Automation Bundles(DABs)は Databricks CLI の機能である。CLI が Databricks のシークレットを管理せずに Databricks へ認証できるようにするには、ターゲットワークスペースのサービスプリンシパルに対する OAuth トークンフェデレーションを使うことが推奨される。",
+jp:"CI/CD での認証の推奨方法＝OAuth トークンフェデレーション(シークレット管理不要)。PATやクライアントシークレットは管理コストとセキュリティリスクが伴うため非推奨、という優先順位を理解する。"
+},
+{
+n:39, d:"ジョブ・ワークフロー",
+q:"クラスターポリシーを使うことの利点でないものはどれですか。",
+o:[
+ {t:"クラスターが一貫したシステム設定・環境変数・Spark 設定で作成されることを保証する", c:false, e:"クラスターポリシーの利点の一つ。"},
+ {t:"クラスタースコープのライブラリインストールを強制する", c:false, e:"クラスターポリシーの利点の一つ。"},
+ {t:"クラスターごとの最大コストを制限してコストを制御する", c:false, e:"クラスターポリシーの利点の一つ。"},
+ {t:"特定の時刻にクラスターを自動的に起動・停止するようスケジュールする", c:true, e:"正解(＝利点ではない)。クラスターポリシーではクラスターの起動・停止のスケジューリングはサポートされない。"}
+],
+ov:"特定の時刻にクラスターを起動・停止するようスケジュールすることは、クラスターポリシーではサポートされない。クラスターポリシーは主に、一貫した設定の強制、ライブラリインストールの管理、クラスター作成時の上限や既定値の設定によるコスト制御を目的として設計されている。",
+jp:"クラスターの自動起動・停止のスケジューリングはクラスターポリシーの機能ではない(別の仕組み、たとえばジョブのスケジュールやAPIでの制御が必要)、という境界を理解する。"
+},
+{
+n:40, d:"Structured Streaming",
+q:"あるデータエンジニアが Databricks Auto Loader を使って次のストリーミング取り込みコードを実装しました。\n\nspark.readStream \\\n     .format(\"cloudFiles\") \\\n     .schema(expected_schema) \\\n     .option(\"cloudFiles.format\", \"json\") \\\n     .option(\"cloudFiles.schemaEvolutionMode\", \"failOnNewColumns\") \\\n     .load(\"s3://vendor/raw/sales/json/\") \\\n    .writeStream \\\n     .option(\"checkpointLocation\", \"s3://vendor/checkpoints/sales\") \\\n     .start(\"sales_table\")\n\n既存のスキーマにない新しい列が受信 JSON ファイルに現れた場合、このストリーミングジョブはどうなりますか。",
+o:[
+ {t:"ストリームは一時的に失敗するが、スキーマを更新せず新しい列を無視して継続する", c:false, e:"failOnNewColumns は無視して継続するモードではない。"},
+ {t:"ストリームは失敗し、スキーマが手動で更新されるか、問題のあるデータファイルが削除されるまで再起動しない", c:true, e:"正解。failOnNewColumns モードでは新しい列を検出すると即座に失敗し、厳密なスキーマの一貫性を強制する。スキーマが手動で更新されるか、不一致を引き起こしたデータファイルが取り除かれるまで自動的には再起動しない。"},
+ {t:"ストリームは失敗し、新しい列はすべて後で処理できるよう rescued data 列に保存される", c:false, e:"rescue モードの挙動であり failOnNewColumns の挙動ではない。"},
+ {t:"ストリームは失敗するが、新しい列を含むようスキーマを更新した後で自動的に再起動する", c:false, e:"自動的な再起動は行われない。"}
+],
+ov:"failOnNewColumns モードでは、ストリームは新しい列を検出すると即座に失敗し、厳密なスキーマの一貫性を強制する。スキーマが手動で更新されて新しい列が含まれるようになるか、スキーマ不一致を引き起こしているデータファイルが取り除かれるまで、自動的には再起動しない。これにより静かなスキーマドリフトを防ぎ、意図的なスキーマ管理を保証する。",
+jp:"schemaEvolutionMode の4種類(addNewColumns / rescue / failOnNewColumns / none)のうち failOnNewColumns の挙動を単独で問う出題。失敗後、自動再起動されない(手動対応が必要)という点が核心。"
+},
+{
+n:41, d:"Unity Catalog・ガバナンス",
+q:"Databricks-to-Databricks sharing(D2D)と open Delta Sharing protocol(D2O)の違いを正しく説明しているのはどれですか。",
+o:[
+ {t:"D2D は Databricks クライアント同士でのみデータ共有を可能にし、D2O は Delta Sharing のオープン標準を実装した任意のプラットフォームが共有データへアクセスできるようにする", c:true, e:"正解。D2D は Databricks エコシステム内でのシームレスな共有に最適化されており、D2O はオープンな Delta Sharing プロトコルをサポートする外部プラットフォームまで相互運用性を拡張する。"},
+ {t:"D2D は旧来の Hive メタストアを使い、D2O は新しい実装のために Unity Catalog 上に構築されている", c:false, e:"どちらも Unity Catalog を基盤としており、この違いの説明は誤り。"},
+ {t:"D2D はマネージドテーブルのみを通じたデータ共有をサポートし、D2O はマネージド・外部テーブルの両方をサポートする", c:false, e:"テーブル種別による違いという説明は誤り。"},
+ {t:"D2D は Delta Sharing のオープン標準をサポートする任意のプラットフォームとの共有を許可し、D2O は Databricks クライアントのみに共有を制限する", c:false, e:"D2D と D2O の説明が完全に逆になっている。"}
+],
+ov:"Delta Sharing でデータを共有する方法は主に2つある。①Databricks-to-Databricks sharing(D2D)：Unity Catalog が有効なワークスペースから、同じく Unity Catalog が有効な Databricks ワークスペースへアクセスできるクライアントへデータを共有できる。Databricks に組み込まれた Delta Sharing サーバーを使い、ノートブック共有・Unity Catalog のデータガバナンス・監査・提供側と受信側双方の使用状況追跡をサポートする。②Databricks open sharing protocol(D2O)：Unity Catalog が有効な Databricks ワークスペースで管理しているデータを、任意のコンピューティングプラットフォーム上のユーザーと共有できる。これも Databricks に組み込まれた Delta Sharing サーバーを使い、Databricks を使っていない、あるいは Unity Catalog が有効な Databricks ワークスペースへアクセスできないユーザーとデータを共有したい場合に有用である。つまり D2D は Databricks エコシステム内でのシームレスな共有に最適化されており、D2O はオープンな Delta Sharing プロトコルをサポートする外部プラットフォームまで相互運用性を拡張する。",
+jp:"Exam1 Q30、Exam2 Q10・Q13で繰り返し出てきた D2D/D2O(open protocol)の区別が、今回は正面から定義を問う形で出題。相手が Databricks か否かで使い分ける、という結論を最終確認する問題。"
+},
+{
+n:42, d:"Delta Lake",
+q:"Databricks でのテーブルクローンに関する記述として正しいのはどれですか。",
+o:[
+ {t:"deep clone への変更はクローン自体にのみ影響しソーステーブルには影響しない。一方 shallow clone への変更はソーステーブルに影響する", c:false, e:"shallow clone への変更もソーステーブルには影響しない。"},
+ {t:"deep clone・shallow clone のどちらへの変更も、クローン自体にのみ影響しソーステーブルには影響しない", c:true, e:"正解。いずれのクローン方式でも、クローン版のテーブルに適用されたデータ変更はソースとは別に追跡・保存されるため、ソーステーブルには影響しない。"},
+ {t:"shallow clone への変更はクローン自体にのみ影響しソーステーブルには影響しない。一方 deep clone への変更はソーステーブルに影響する", c:false, e:"deep clone への変更もソーステーブルには影響しない。"},
+ {t:"deep clone・shallow clone のどちらへの変更もソーステーブルに影響する", c:false, e:"誤り。どちらの変更もソーステーブルには影響しない。"}
+],
+ov:"deep clone・shallow clone のいずれの場合でも、クローン版のテーブルに適用されたデータ変更は、ソースとは別に追跡・保存されるため、ソーステーブルには影響しない。",
+jp:"deep/shallow の違いは『データの実体を持つか(deep)、元のファイルを参照するか(shallow)』であって、『変更がソースに影響するかどうか』では両者に差はない、という点が本問の核心。この誤解しやすいポイントを明確にする出題。"
+},
+{
+n:43, d:"開発ツール・Git",
+q:"現在のノートブックのセッションに限定した Python wheel をインストールし、そのノートブックと関連ジョブだけがそのライブラリにアクセスできるようにしたい場合、使うコマンドはどれですか。",
+o:[
+ {t:"%fs install my_package.whl", c:false, e:"%fs はファイルシステム操作用のマジックコマンドであり、パッケージのインストールには使わない。"},
+ {t:"%whl install my_package", c:false, e:"そのようなマジックコマンドは存在しない。"},
+ {t:"%pip install my_package.whl", c:true, e:"正解。現在のノートブックのセッションに限定した Python wheel をインストールできる。このライブラリは、このノートブックと、このノートブックに関連するジョブのみからアクセス可能になる。"},
+ {t:"%python install my_package.whl", c:false, e:"そのようなマジックコマンドは存在しない。"}
+],
+ov:"'%pip install' により、現在のノートブックのセッションに限定した Python wheel をインストールできる。このライブラリは、このノートブックと、このノートブックに関連するジョブのみからアクセス可能になる。",
+jp:"%pip install の効果はノートブックセッションスコープ。クラスター全体で常時利用可能にしたいなら init script(Exam2 Q51)を使う、という使い分けを対比で覚える。"
+},
+{
+n:44, d:"ジョブ・ワークフロー",
+q:"マルチタスクジョブの実行をプログラム的にトリガーできない手段はどれですか。",
+o:[
+ {t:"REST API", c:false, e:"プログラム的にジョブを実行できる。"},
+ {t:"Command-line interface(CLI)", c:false, e:"プログラム的にジョブを実行できる。"},
+ {t:"Databricks SDKs", c:false, e:"プログラム的にジョブを実行できる。"},
+ {t:"Workspace Jobs UI", c:true, e:"正解(＝プログラム的な実行ができない)。手動操作を必要とするグラフィカルインターフェースであり、自動化やコードベースのジョブ実行には使えない。"}
+],
+ov:"Workspace Jobs UI では、データエンジニアがマルチタスクジョブの実行をプログラム的にトリガーすることはできない。手動操作を必要とするグラフィカルインターフェースであり、自動化やコードベースのジョブ実行には使えない。一方 REST API、CLI、Databricks SDK はいずれもジョブを実行するプログラム的な手段を提供する。",
+jp:"Workspace UI は手動操作専用、それ以外(REST API / CLI / SDK)はプログラム的に実行可能、という切り分け。"
+},
+{
+n:45, d:"Unity Catalog・ガバナンス",
+q:"データアーキテクチャにおける Lakehouse Federation の主な目的はどれですか。",
+o:[
+ {t:"すべてのデータを Databricks へ移行して一元的に処理するため", c:false, e:"データを移行せずに直接クエリすることが目的であり、移行が目的ではない。"},
+ {t:"Databricks に保存されたデータのバックアップを作成するため", c:false, e:"バックアップ機能ではない。"},
+ {t:"データを移行せずに複数のデータソースへ横断的に直接クエリできるようにするため", c:true, e:"正解。データレイク・データウェアハウス・データベースなど多様なデータソースへ、Databricks への物理的な移行を必要とせずに横断的なクエリを実行できるようにする。"},
+ {t:"データを圧縮してストレージコストを最適化するため", c:false, e:"ストレージコストの最適化が主目的ではない。"}
+],
+ov:"Lakehouse Federation により、ユーザーやアプリケーションはデータレイク・ウェアハウス・データベースといった多様なデータソースへ、データを物理的に Databricks へ移行することなく横断的にクエリを実行できる。これによりデータの重複が減り、レイテンシが下がり、アクセスが効率化され、分散環境全体で統一されたクエリ体験を実現する。",
+jp:"Exam2 Q14と同一知識の再確認。『データを動かさずにクエリする』という Lakehouse Federation の本質を、より抽象的な問い方で出題。"
+}
+,
+{
+n:46, d:"Delta Lake",
+q:"「テーブルへの個々の書き込み時に、2つの補完的な操作を通じて小さいファイルを自動的に圧縮する Delta Lake の機能」という記述が指しているのはどれですか。",
+o:[
+ {t:"Optimized writes", c:false, e:"Auto Optimize を構成する2操作のうちの1つであり、この記述全体が指すものではない。"},
+ {t:"Auto compaction", c:false, e:"Auto Optimize を構成する2操作のうちのもう1つであり、この記述全体が指すものではない。"},
+ {t:"OPTIMIZE operation", c:false, e:"手動実行する最適化コマンドであり、書き込み時に自動で行われるものとは異なる。"},
+ {t:"Auto Optimize", c:true, e:"正解。個々の書き込み時に Delta テーブルの小さいデータファイルを自動的に圧縮できるようにする機能で、Optimized writes と Auto compaction という2つの補完的な操作から成る。"}
+],
+ov:"Auto Optimize は、Delta Lake テーブルへの個々の書き込み中に小さいデータファイルを自動的に圧縮できるようにする機能である。Auto Optimize は2つの補完的な操作から成る。①Optimized writes：この機能を有効にすると、Databricks は各テーブルパーティションについて128MBのファイルを書き出そうとする。②Auto compaction：個々の書き込みの後に、ファイルをさらに圧縮できるかを確認する。可能であれば、標準の OPTIMIZE が使う1GBのファイルサイズではなく128MBのファイルサイズで OPTIMIZE ジョブを実行する。",
+jp:"Auto Optimize＝Optimized Writes＋Auto Compaction の総称、という上位概念を問う出題。この2つの子機能それぞれの詳細(Exam1 Q46など)と、それらをまとめた親概念(Auto Optimize)の呼び名を区別する。"
+},
+{
+n:47, d:"Lakeflow SDP",
+q:"あるデータエンジニアが SDP パイプラインで次の関数を定義しました。\n\n@dlt.table\n@dlt.expect_or_drop(\"quantity_within_range\", \"quantity BETWEEN 0 AND 1000\")\n@dlt.expect_or_drop(\"recent_transaction\", \"transaction_date >= '2025-01-01'\")\n@dlt.expect_or_drop(\"valid_transaction\", \"transaction_id IS NOT NULL'\")\ndef silver_sales():\n    return dlt.read_stream(\"bronze_sales\")\n\nこのパイプラインの実行結果を正しく説明しているのはどれですか。",
+o:[
+ {t:"定義された期待値に違反する行は両方のテーブルから削除される", c:false, e:"bronze_sales 側のテーブルには言及がなく、対象は silver_sales のみ。"},
+ {t:"定義された期待値に違反する行は bronze_sales テーブルから削除される", c:false, e:"ソース側の bronze_sales が変更されるわけではない。expect_or_drop はターゲット(silver_sales)への書き込みを制御する。"},
+ {t:"定義された期待値に違反する行はフィルタで除外され、有効な行のみが silver_sales へ書き込まれる", c:true, e:"正解。3つの expect_or_drop すべてを満たす行のみが silver_sales に含まれ、いずれかに違反する行は除外される。"},
+ {t:"定義された期待値に違反する行は silver_sales テーブルへストリーミングされる", c:false, e:"expect_or_drop は違反行を書き込まず削除する。"}
+],
+ov:"expect_or_drop 関数は SDP(旧 DLT)におけるデータ品質強制ルールである。expect の部分が品質制約(例：\"quantity BETWEEN 0 AND 1000\")を定義し、or_drop の部分が期待値に違反した場合のアクション(違反行を破棄しターゲットテーブルへ書き込まない)を定義する。この例では、3つの定義された期待値(quantity_within_range、recent_transaction、valid_transaction)すべてに正常に合格した行のみが silver_sales テーブルに含まれる。いずれかに違反した行は破棄される。",
+jp:"複数の expect_or_drop を重ねて適用すると AND 条件になる(すべてを満たす行のみ残る)、という積み重ね方の理解を問う。Exam1 Q47(単一のexpect_or_dropとexpect_or_failの対比)と組み合わせて理解する。"
+},
+{
+n:48, d:"Lakeflow SDP",
+q:"'sales_cleaned' Silver テーブルに対し、YTD(年初来累計)の売上を計算する Gold 層エンティティを作ります。指標は日次1回の再計算で十分ですが、複数の業務チームから頻繁にクエリされるため、コストとレイテンシを抑えたい場合、正しい解決策はどれですか。",
+o:[
+ {t:"指標が再計算されるたびに結果を永続化しないよう、新しいエンティティをビューとして定義する", c:false, e:"頻繁にクエリされる複雑な集計をビューにすると、クエリのたびに再計算が発生しコストが増す。"},
+ {t:"夜間バッチジョブを構成して指標を再計算し、更新のたびに上書きされるテーブルとして保存する", c:true, e:"正解。日次1回の再計算で十分という要件に合致し、結果をテーブルとして保存することで頻繁なクエリのたびに再計算する必要がなくなる。"},
+ {t:"新しいエンティティを global temporary view として定義する。コンピューティングリソースを共有するノートブックやジョブ間で共有できるため", c:false, e:"temporary view はセッション/コンピュートに紐づき永続的でないため、この要件には適さない。"},
+ {t:"業務チームごとに複数のテーブルを作成し、指標を素早く効率的にクエリできるようにする", c:false, e:"チームごとに重複したテーブルを作る必要はなく、不必要な複雑さとコストを生む。"}
+],
+ov:"ビューとテーブルでの結果の実体化がどう異なるか、そしてシナリオに応じてそれぞれの実体化に伴う総コンピュートコストとストレージコストをどう下げるかを理解する必要がある。ビューを検討すべき場面：クエリが複雑でない場合(ビューはオンデマンドで計算されるためクエリのたびに再計算される。結合やサブクエリを含む複雑なクエリを頻繁に実行するとコンピュートコストが増える)、ストレージコストを下げたい場合(ビューは追加のストレージリソースを必要としない)。Gold テーブルを検討すべき場面：複数の下流クエリがそのテーブルを消費するため、複雑なアドホッククエリを毎回再計算するのを避けたい場合、継続的または増分的に増加するデータソースからクエリ結果を増分的に計算すべき場合。",
+jp:"ビュー vs テーブルの使い分けの一般原則：頻繁に消費される複雑な集計＝テーブル(事前計算)、単純または稀にしか使われないクエリ＝ビュー(オンデマンド)。この設問は『頻繁にクエリされる複雑な集計』なのでテーブル化(夜間バッチ)が正解。"
+},
+{
+n:49, d:"開発ツール・Git",
+q:"本番環境でノートブックをスケジュール実行する前に、一般的なルールとしてコードから取り除くべきコマンドはどれですか。",
+o:[
+ {t:"マジックコマンド", c:false, e:"マジックコマンド自体は問題ではなく、開発中に使うすべてを取り除く必要はない。"},
+ {t:"マークアップ言語コマンド", c:false, e:"ドキュメント用のコマンドであり削除の対象ではない。"},
+ {t:"Display コマンド", c:true, e:"正解。デバッグ目的で追加された display アクションや SQL クエリはコメントアウトしておくべき。"},
+ {t:"Import コマンド", c:false, e:"通常は本番実行にも必要であり削除すべきではない。"}
+],
+ov:"本番環境でノートブックをスケジュールする前に、コードのリファクタリングが必要になることがある。一般的なルールとして、開発中に追加した不要なファイル削除やテーブル削除のコマンド、デバッグ目的で追加した display アクションや SQL クエリはコメントアウトしておくべきである。",
+jp:"本番投入前のクリーンアップチェックリスト：display() 呼び出し、デバッグ用SQL、開発中の削除コマンドをコメントアウトする。importは通常残す。"
+},
+{
+n:50, d:"パフォーマンス最適化",
+q:"employee_name、department、salary を持つ DataFrame で、部署ごとに給与に基づく等級を割り当てたい。給与が同じ従業員は同じ等級とし、その次の異なる給与の従業員には、それまでの同順位の人数分だけ番号が飛んだ等級を与えたい(例：HR部門で4000のEveとFrankが共にtier 1、3900のDavidはtier 3)。正しい関数はどれですか。",
+o:[
+ {t:"row_number().over(window_spec)", c:false, e:"給与が同じでも各行に一意の連番を振ってしまい、同順位を共有させられない。"},
+ {t:"dense_rank().over(window_spec)", c:false, e:"同順位の後で番号を飛ばさないため(1, 1, 2)、期待される出力(1, 1, 3)と一致しない。"},
+ {t:"percent_rank().over(window_spec)", c:false, e:"0〜1の小数値を割り当てるため、整数の等級番号にはならない。"},
+ {t:"rank().over(window_spec)", c:true, e:"正解。同じ給与の従業員には同じ等級を割り当てつつ、給与が異なる場合は正しい順序を保つ。同順位の後は、それまでの件数を踏まえて番号が飛ぶ。"}
+],
+ov:"正しい関数は rank() である。これは各部署内で同一の給与を持つ従業員に同じ順位(等級)を割り当てつつ、給与が異なる場合には正しい順序を維持するため。この場合、同じ給与値の従業員は同じ等級番号を共有し、次の異なる給与はそれ以前のエントリ数を反映した順位を受け取り、同順位が発生すると等級番号が飛ぶことになる。これは期待される出力と一致する。たとえば HR 部門の Eve と Frank はともに給与4000で等級1を共有し、給与がより低い3900の David は等級3を得る。row_number() のような他の関数は同順位でも一意の連番を割り当ててしまい、dense_rank() は同順位の後で番号を飛ばさず、percent_rank() は0〜1の小数の順位を割り当てるため、いずれも望ましい挙動とは一致しない。",
+jp:"Exam1 Q36(dense_rank)、Exam2 Q24(row_number)と対になる3問セットの最後。rank()＝同順位は同じ番号、その後は飛ぶ(1,1,3)。4つの関数の違いを完全に区別できるようにする総仕上げの問題。"
+},
+{
+n:51, d:"Unity Catalog・ガバナンス",
+q:"大きな Delta Lake テーブルの一部をデータサイエンスチームと共有したい。部署固有の列だけを、別の名前で共有する必要があり、さらに機微なデータは共有前にフィルタして除く必要があります。この要件を満たすために作成すべきオブジェクトはどれですか。",
+o:[
+ {t:"既存テーブルへの保存済みビュー", c:true, e:"正解。ビューを作成すれば、必要な列を別名にリネームでき、機微なデータは WHERE 句でフィルタして除外できる。"},
+ {t:"既存テーブルから SHALLOW CLONE で作成した新しい Delta テーブル", c:false, e:"クローンは列名の変更やデータのフィルタリングを行う仕組みではない。"},
+ {t:"既存テーブルに対する CTAS 文で作成した新しい Delta テーブル", c:false, e:"実現は可能だが、新しいテーブルとしてデータを物理的に複製することになり、シンプルな解決策とは言えない。"},
+ {t:"既存テーブルから DEEP CLONE で作成した新しい Delta テーブル", c:false, e:"データを複製するだけで、列名変更やフィルタリングという要件を直接満たさない。"}
+],
+ov:"この場合の解決策は、テーブルに対してビューを作成し、そこで必要な列をリネームでき、除外すべき機微なデータを WHERE 句でフィルタできるようにすることである。",
+jp:"『列名を変える』＋『機微なデータを除く』という2つの要件は、どちらもビュー(SELECTでのAS別名指定とWHERE句)で簡単に実現できる、というシンプルな解決策を選ぶ問題。クローンやCTASは過剰な解決策。"
+},
+{
+n:52, d:"Unity Catalog・ガバナンス",
+q:"外部 MySQL データベースへの mysql_connection という接続を Databricks で確立済みです。Lakehouse Federation を活用して MySQL のテーブルを Unity Catalog 経由でクエリ可能にする次のステップはどれですか。",
+o:[
+ {t:"mysql_connection 経由で既定の場所を定義した外部カタログを作成する", c:false, e:"『外部カタログ』という名称・概念ではなく、正しくは『foreign catalog(外部接続を表すカタログ)』を作成する。"},
+ {t:"mysql_connection を使って MySQL 用の Unity Catalog メタストアをセットアップする", c:false, e:"MySQL 専用のメタストアをセットアップするのではなく、既存の Unity Catalog に foreign catalog を追加する。"},
+ {t:"mysql_connection を使って Unity Catalog に foreign catalog(外部カタログ)を作成する", c:true, e:"正解。Lakehouse Federation により、Unity Catalog は MySQL のような外部データソースを foreign catalog として登録でき、データを移動せずにガバナンスされた安全な形でテーブルにアクセス・クエリできるようにする。"},
+ {t:"mysql_connection 経由で MySQL データを参照する外部テーブルを作成する", c:false, e:"個々のテーブルを1つずつ登録するのではなく、foreign catalog を作成することでスキーマ全体を一括して登録できる。"}
+],
+ov:"チームが次に取るべきステップは、既存の mysql_connection を使って Unity Catalog に foreign catalog を作成することである。Databricks の Lakehouse Federation は、Unity Catalog が MySQL のような外部データソースを foreign catalog として登録できるようにする。これによりデータを移動せずに、ガバナンスされた安全な形でテーブルにアクセス・クエリできるようになり、チームの目標に合致する。",
+jp:"Lakehouse Federation の実装手順：①connection(接続情報)を作成 ②foreign catalog(接続を使ったカタログ)を作成、の2ステップ。すでに connection がある状態からの『次の一手』を問う実務的な出題。"
+},
+{
+n:53, d:"Delta Lake",
+q:"Slowly Changing Dimension の Type 0 を正しく定義しているのはどれですか。",
+o:[
+ {t:"変更が一切許可されないテーブルである", c:true, e:"正解。Type 0 の SCD テーブルは決して変更されない。一般に静的なもので、たとえば静的なルックアップテーブルなどが該当する。"},
+ {t:"追加の列に履歴が保持されるテーブルである", c:false, e:"これは別の SCD の実装パターンの説明であり Type 0 ではない。"},
+ {t:"現在のデータと履歴データの両方を時間をかけて保存・管理するテーブルである", c:false, e:"これは Type 2 の説明。"},
+ {t:"新しく到着したデータが既存のデータを上書きするテーブルである", c:false, e:"これは Type 1 の説明。"}
+],
+ov:"Type 0 の SCD テーブルは決して変更されない。この型のテーブルは通常静的であり、たとえば静的なルックアップテーブルなどが該当する。",
+jp:"SCD Type 0(不変)・Type 1(上書き、Exam1 Q8)・Type 2(履歴保持、Exam2 Q32)の3種類が出そろった。定義文を3つセットで暗記しておくと、どの角度から聞かれても即答できる。"
+},
+{
+n:54, d:"パフォーマンス最適化",
+q:"実行に時間がかかったクエリを Query Profiler で調べ、「Total wall-clock duration」という指標を確認しています。この指標が何を測定しているかを正しく説明しているのはどれですか。",
+o:[
+ {t:"実際のクエリ実行に費やされた時間", c:false, e:"実行時間だけでなくスケジューリングや最適化の時間も含む、より広い範囲の測定。"},
+ {t:"スケジューリング開始からクエリ実行終了までの合計時間", c:true, e:"正解。スケジューリング、最適化とファイルプルーニング、実際の実行を含む、クエリの実行にかかった全期間をカバーする。"},
+ {t:"クエリの最適化とファイルプルーニングに費やされた合計時間", c:false, e:"この指標が測定するのは最適化部分だけではない。"},
+ {t:"クエリのスケジューリングに費やされた時間", c:false, e:"この指標が測定するのはスケジューリング部分だけではない。"}
+],
+ov:"Total wall-clock duration 指標は、スケジューリング開始からクエリ実行終了までの合計時間を測定し、スケジューリング、最適化とファイルプルーニング、実際の実行を含む、クエリの実行にかかった全期間をカバーする。",
+jp:"Query Profile の指標名(Total wall-clock duration)が指す範囲を正確に理解する。実行時間だけでなくスケジューリング・最適化も含む『全体の時計時間』という定義。"
+},
+{
+n:55, d:"ジョブ・ワークフロー",
+q:"複数タスクを持つジョブで、各タスクが複数回リトライされることがあります。失敗したタスクがリトライされたとき、ジョブ通知が送られないことに気づきました。すべての失敗タスクについて確実に失敗通知を受け取れる設定はどれですか。",
+o:[
+ {t:"各タスクごとに、ジョブレベルのリトライを持つ別々のジョブを作る", c:false, e:"根本的な通知レベルの問題を解決せず、構成を不必要に複雑化する。"},
+ {t:"ジョブ定義でタスクレベルの通知を使う", c:true, e:"正解。タスクレベルの通知は、失敗を含む各タスクのイベントごとにトリガーされる。"},
+ {t:"各タスク内でカスタムの通知ロジックを実装する", c:false, e:"組み込みの機能で対応できるにも関わらず、不必要に複雑な実装になる。"},
+ {t:"すべてのタスクのリトライを無効化し、ジョブレベルの通知に頼る", c:false, e:"ジョブレベルの通知はジョブ全体の成功・失敗時にしかトリガーされず、個々のタスクの失敗ごとには送られない。"}
+],
+ov:"マルチタスクジョブでは、通知は2つのレベルで構成できる。①ジョブレベルの通知：ジョブ全体が成功または失敗したときのみトリガーされる。つまり個々のタスクが失敗してもリトライで成功すれば、ジョブ全体が完了または失敗するまで通知は送られない。②タスクレベルの通知：失敗を含む各タスクのイベントごとにトリガーされる。タスクレベルの通知を構成することで、後でリトライされたとしても、失敗した各タスクについて通知が送られることが保証される。",
+jp:"ジョブレベル通知(全体の成否のみ)とタスクレベル通知(個々のタスクイベントごと)の違い。リトライで隠れてしまう個々の失敗を捕捉したいならタスクレベル通知を使う、という実務的な設定知識。"
+},
+{
+n:56, d:"Unity Catalog・ガバナンス",
+q:"'DataOps-Prod' というシークレットスコープに、本番ワークスペースで DataOps エンジニアが必要とするすべてのシークレットが含まれています。DataOps エンジニアがこのスコープ内のシークレットを使うために必要な最小限の権限はどれですか。",
+o:[
+ {t:"「DataOps-Prod」スコープへの READ 権限", c:true, e:"正解。このスコープを読み取り、利用可能なシークレットを一覧できる権限で、シークレットを使うための最小限の権限。"},
+ {t:"「DataOps-Prod」スコープへの MANAGE 権限", c:false, e:"MANAGE は ACL の変更も含む、より強い権限であり最小限ではない。"},
+ {t:"「DataOps-Prod」スコープ内の各シークレットへの MANAGE 権限", c:false, e:"個々のシークレットへの MANAGE は過剰な権限。"},
+ {t:"「DataOps-Prod」スコープ内の各シークレットへの READ 権限", c:false, e:"個々のシークレットに対してではなく、スコープ全体に対する READ 権限を付与するのが正しい単位。"}
+],
+ov:"シークレットのアクセス権限は次のとおりである。MANAGE — ACL の変更、およびこのシークレットスコープへの読み書きが許可される。WRITE — このシークレットスコープへの読み書きが許可される。READ — このシークレットスコープの読み取りと、利用可能なシークレットの一覧表示が許可される。各権限レベルは、それより上位のレベルの権限のサブセットである(つまり、あるスコープに対して WRITE 権限を持つプリンシパルは、READ 権限が必要なすべての操作を実行できる)。",
+jp:"シークレットの3段階権限(READ ＜ WRITE ＜ MANAGE)は、クラスター権限の4段階(No Permissions ＜ Can Attach To ＜ Can Restart ＜ Can Manage)と同じ『階層構造』のパターン。シークレットを使うだけならREADで十分。"
+},
+{
+n:57, d:"Delta Lake",
+q:"CDF が有効な customers という Delta テーブルに対し、次のクエリがあります。\n\nspark.read\n        .option(\"readChangeFeed\", \"true\")\n        .option(\"startingVersion\", 0)\n        .table(\"customers\")\n        .filter(col(\"_change_type\").isin([\"update_postimage\"]))\n    .write\n        .mode(\"overwrite\")\n        .table(\"customers_updates\")\n\n実行のたびに何が起きますか。",
+o:[
+ {t:"新しく更新されたレコードがターゲットテーブルに追記される", c:false, e:"書き込みモードは overwrite であり追記ではない。"},
+ {t:"更新レコードの全履歴が実行のたびに追記され、重複エントリが発生する", c:false, e:"書き込みモードは append ではなく overwrite。"},
+ {t:"更新レコードの全履歴が実行のたびにターゲットテーブルを上書きする", c:true, e:"正解。spark.read は CDF の変更を静的ソースとして読むため、実行のたびに startingVersion 以降の全変更が読み込まれる。書き込みモードが overwrite のため、実行のたびにターゲットテーブル全体が上書きされる。"},
+ {t:"新しく更新されたレコードがターゲットテーブルを上書きする", c:false, e:"『新しく更新された分だけ』ではなく全履歴が対象になる。"}
+],
+ov:"CDF が捉えたテーブルの変更を spark.read で読むということは、それらを静的ソースとして読み取ることを意味する。したがってクエリを実行するたびに、指定した startingVersion 以降のテーブル変更すべてが読み込まれる。このクエリでは「overwrite」モードでターゲットテーブルへ書き込んでおり、実行のたびにターゲットテーブルを完全に上書きする。",
+jp:"Exam2 Q54(read+append→重複が発生)と対になる問題で、今回は overwrite の場合。read(静的・毎回全件)という前提は同じだが、書き込みモードの違い(append→重複、overwrite→都度全体を置き換え)で結果が変わる。"
+},
+{
+n:58, d:"ジョブ・ワークフロー",
+q:"本番 Databricks ワークスペースで利用可能なジョブを REST API で取得し、ジョブ監視の自動化と可観測性の向上を図りたい場合、正しい API 呼び出しはどれですか。",
+o:[
+ {t:"GET を '/api/2.2/jobs/get' へ送る", c:false, e:"get は特定の1ジョブの詳細取得であり、一覧取得ではない。"},
+ {t:"POST を '/api/2.2/jobs/get' へ送る", c:false, e:"メソッドもエンドポイントも誤り。"},
+ {t:"GET を '/api/2.2/jobs/list' へ送る", c:true, e:"正解。ワークスペース内の利用可能なジョブを取得できる。"},
+ {t:"POST を '/api/2.2/jobs/list' へ送る", c:false, e:"一覧取得は GET を使う。"}
+],
+ov:"'/api/2.2/jobs/list' に GET リクエストを送ることで、Databricks ワークスペース内の利用可能なジョブを取得できる。",
+jp:"jobs/list(全ジョブの一覧)と runs/list(あるジョブの実行一覧、Exam1 Q54)の違いに注意。どちらも GET だが対象が異なる。"
+},
+{
+n:59, d:"開発ツール・Git",
+q:"統合テスト(Integration Testing)を正しく説明しているのはどれですか。",
+o:[
+ {t:"アプリケーションのサブシステム間の相互作用をテストし、モジュールが group として正しく動くことを保証する手法", c:true, e:"正解。ソフトウェアモジュールが論理的に統合され、group としてテストされることを検証する手法。"},
+ {t:"コードの個々の単位をテストし、将来変更が加えられても期待どおりに動作し続けるかを判断する手法", c:false, e:"これはユニットテストの説明。"},
+ {t:"アプリケーションの各機能が業務要件どおりに動作するかを検証する手法", c:false, e:"これは機能テストの説明。"},
+ {t:"実世界のシナリオでアプリケーションが正しく動作することを保証するため、ユーザー体験をシミュレートする手法", c:false, e:"これはエンドツーエンドテストの説明。"}
+],
+ov:"統合テストは、アプリケーションのサブシステム間の相互作用をテストする手法である。ソフトウェアモジュールが論理的に統合され、group としてテストされることを検証する。",
+jp:"テストの階層(unit / integration / functional / end-to-end)の定義文がこれで全種類そろった。Exam1 Q40(end-to-end)、Exam2 Q47(unit)と合わせて4種類の定義を一覧で復習するとよい。"
+}
+];
+
+const TRANS = {};
+
+const list = document.getElementById('list');
+const search = document.getElementById('search');
+const toggleAns = document.getElementById('toggle-ans');
+
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+function fmt(s){ const e = esc(s); return e.includes('\n') ? `<span class="code-block">${e}</span>` : e; }
+
+function render(){
+  const term = search.value.trim().toLowerCase();
+  const rows = DATA.filter(item => {
+    if (!term) return true;
+    const blob = (item.q + item.ov + item.jp + item.o.map(o => o.t + o.e).join(' ')).toLowerCase();
+    return blob.includes(term);
+  });
+
+  document.getElementById('empty').style.display = rows.length ? 'none' : 'block';
+  list.innerHTML = rows.map(item => {
+    const tr = TRANS[item.n] || {};
+    return `
+    <article class="card" id="q${item.n}">
+      <div class="qhead">
+        <span class="qnum">Q${item.n}</span>
+        <span class="domain">${esc(item.d)}</span>
+      </div>
+      <p class="qtext">${fmt(item.q)}</p>
+      <ol class="opts">
+        ${item.o.map((o, i) => `
+          <li class="${o.c ? 'correct' : ''}">
+            <div class="opt-t"><span>${fmt(o.t)}</span></div>
+            <span class="verdict ${o.c ? 'v-ok' : 'v-no'}">${o.c ? '正解' : '誤り'}</span>
+            <p class="exp">${esc(o.e)}</p>
+            ${tr.o && tr.o[i] ? `<p class="exp exp-ja">${esc(tr.o[i])}</p>` : ''}
+          </li>`).join('')}
+      </ol>
+      <button class="reveal" onclick="toggleCard(this)">解答を表示</button>
+      <div class="overall"><h4>Overall explanation</h4>${esc(item.ov)}
+        ${tr.ov ? `<p class="ov-ja">${esc(tr.ov)}</p>` : ''}
+      </div>
+      <div class="jp"><h4>覚えるポイント</h4>${esc(item.jp)}</div>
+    </article>`;
+  }).join('');
+}
+
+function toggleCard(btn){
+  const card = btn.closest('.card');
+  const shown = card.classList.toggle('shown');
+  btn.textContent = shown ? '解答を隠す' : '解答を表示';
+}
+
+toggleAns.onclick = () => {
+  const hidden = document.body.classList.toggle('hide-answers');
+  toggleAns.textContent = hidden ? 'すべての解答を表示' : 'すべての解答を隠す';
+  toggleAns.classList.toggle('on', hidden);
+  document.querySelectorAll('.card.shown').forEach(c => c.classList.remove('shown'));
+  document.querySelectorAll('.reveal').forEach(b => b.textContent = '解答を表示');
+};
+search.oninput = render;
+render();
+</script>
+</body>
+</html>
